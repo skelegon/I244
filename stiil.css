@@ -1,10 +1,35 @@
-body { 
-  background:#008080; 
+body {
+  background:#AA5439;
+  color: #113951;
 }
-#pealkiri{ 
-  color:#808000;
+#pealkiri{
+  text-align: center;
+  font-family: calibri;
+}
+
+#viide{
+  color: #437313;
+  text-transform:uppercase;
+  font-weight:bold;
+  font-family: calibri;
+}
+
+div a {
+  text-align: center;
+  display: block;
+  margin: 0 auto;
+}
+
+#pilt1{
+  width: 400px;
+  height: 300px;
+  display: block;
+  margin: 0 auto;
 }
 
 div {
-	background:#FFFFFF;
+	background:#D4836A;
+  width: 500px;
+  border: 1px solid #032336;
+  margin:0 auto;
 }
