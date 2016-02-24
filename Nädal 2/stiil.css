@@ -1,0 +1,12 @@
+table, tr, th{
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+div {
+  margin-bottom: 20px;
+}
+
+#form1 th {
+  min-width: 50px;
+}
