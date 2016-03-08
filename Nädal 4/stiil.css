@@ -1,0 +1,119 @@
+body {
+  background-image: url("bg.png");
+}
+
+#pealkiri1{
+  color: #113951;
+  text-align: center;
+  font-family: calibri;
+}
+
+#container a {
+  text-decoration: none;
+}
+
+.content {
+  background-color: #ffffff;
+  text-align: justify;
+}
+
+#container .viide {
+  color: #437313;
+  text-transform:uppercase;
+  font-weight:bold;
+}
+
+#container .viide:hover {
+  color:#273737;
+  text-decoration: underline;
+}
+
+#container {
+  background:#D4836A;
+  border: 1px solid #032336;
+  min-width: 600px;
+  max-width: 1000px;
+  margin:auto;
+}
+
+#container .div-keskel {
+  text-align: center;
+  display: table;
+  margin:0 auto;
+}
+#container .div-keskel .inlinediv div {
+  display:block;
+  float:left
+}
+
+img:not(.validators){
+  border-style: solid;
+}
+
+#menu1 ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+#menu1 li {
+    float: left;
+    border-right: 1px solid #000;
+}
+
+#menu1 li a {
+    color: inherit;
+}
+
+#menu1 a:hover {
+    text-decoration: underline;
+    font-style: italic;
+    background-color: #D4836A;
+}
+
+#menu1 li:last-child {
+    border-right: none;
+}
+
+#menu1 li a {
+    display: block;
+    padding: 8px;
+    background-color: #ffd0aa;
+}
+
+#menu2 ol {
+    list-style-type: none;
+    margin: 10px;
+    padding: 0px;
+    overflow: hidden;
+}
+
+#menu2 li {
+    float: right;
+    border-left: 1px solid #000;
+}
+
+#menu2 li a {
+  color: inherit;
+}
+
+#menu2 a:hover {
+  text-decoration: underline;
+  font-style: italic;
+  background-color: #D4836A;
+}
+
+#menu2 li:last-child {
+    border-left: none;
+}
+
+#menu2 li a {
+    display: block;
+    padding: 4px;
+    background-color: #ffd0aa;
+}
+
+.content img {
+  float: left;
+}
