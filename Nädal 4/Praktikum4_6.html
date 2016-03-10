@@ -1,53 +1,66 @@
 <!DOCTYPE html>
-
 <html>
-	<head>
-		<meta charset="utf-8" />
-		<title>Pildi detailne vaatefail</title>
-		<link rel="stylesheet" type="text/css" href="stiil.css">
-	</head>
+  <head>
+    <meta charset="utf-8" />
+    <title>Võrgurakenduste 1. praktikum</title>
+    <link rel="stylesheet" type="text/css" href="stiil.css">
+  </head>
+  <body>
+    <div id="container">
+      <div class="header">
+      </div>
+      <div id="menu">
+        <ul>
+          <li class="active"><a href="Praktikum4.html">PEALEHT</a></li>
+          <li><a href="Praktikum4_2.html">GALERII</a></li>
+          <li style="float:right"><a href="Praktikum4_4.html">LOGI SISSE</a></li>
+          <li style="float:right"><a href="Praktikum4_5.html">REGISTREERI</a></li>
+        </ul>
+      </div>
+      <div class="header">
+  	</div>
 
-	<body>
-		<div id="list">
-			<ul>
-			  <li>
-			    <a href="Praktikum2.html">Pealeht</a>
-			  </li>
-				<li>
-					<a href="Praktikum2_2.html">Galerii</a>
-				</li>
-			</ul>
+  	<div class ="content">
+	    <div id="upload">
+	      <form action="Praktikum2_6.html" method="post">
+	        <table>
+	          <tr>
+	            <th>Autor</th>
+	            <th><input name="autor" type="text"</input></th>
+	          </tr>
+						<tr>
+	            <th>Pealkiri</th>
+	            <th><input name="pealkiri" type="text"</input></th>
+	          </tr>
+						<tr>
+							<th>Suur pilt</th>
+							<th>
+								<input type="file" name="pic" accept="image/*">
+					  		<input type="submit">
+							</th>
+	          </tr>
+						<tr>
+							<th>Väike pilt</th>
+							<th>
+								<input type="file" name="pic" accept="image/*">
+								<input type="submit">
+							</th>
+						</tr>
+						<tr>
+	            <th colspan="2"><input type="submit" value="Lae üles"></th>
+	          </tr>
+	        </table>
+	      </form>
+	    </div>
 		</div>
-    <div id="upload">
-      <form action="Praktikum2_6.html" method="post">
-        <table>
-          <tr>
-            <th>Autor</th>
-            <th><input name="autor" type="text"</input></th>
-          </tr>
-					<tr>
-            <th>Pealkiri</th>
-            <th><input name="pealkiri" type="text"</input></th>
-          </tr>
-					<tr>
-						<th>Suur pilt</th>
-						<th>
-							<input type="file" name="pic" accept="image/*">
-				  		<input type="submit">
-						</th>
-          </tr>
-					<tr>
-						<th>Väike pilt</th>
-						<th>
-							<input type="file" name="pic" accept="image/*">
-							<input type="submit">
-						</th>
-					</tr>
-					<tr>
-            <th colspan="2"><input type="submit" value="Lae üles"></th>
-          </tr>
-        </table>
-      </form>
-    </div>
+
+		<div id="footer">
+			<a href="http://validator.w3.org/check?uri=referer">
+				<span style="background:url('http://www.w3.org/Icons/valid-xhtml10')" class="validatorlogo"></span>
+			</a>
+			<a href="http://jigsaw.w3.org/css-validator/check/referer">
+				<span style="background:url('http://jigsaw.w3.org/css-validator/images/vcss')" class="validatorlogo"></span>
+			</a>
+		</div>
 	</body>
 </html>

@@ -1,5 +1,55 @@
+.header {
+  background:#2C4870;
+  height:10px;
+  margin-bottom: 5px;
+}
+
+#menu ul {
+    list-style-type: none;
+    margin: 0;
+    margin-bottom: 5px;
+    padding: 0;
+    overflow: hidden;
+}
+
+#menu li {
+    width: 150px;
+    text-align: center;
+    font-family: monospace;
+    font-size: 16px;
+    background-color: #DCE0E5;
+    margin: 0 5px 0 5px;
+    float: left;
+    border-right: 1px solid #2C4870;
+    border-left: 1px solid #2C4870;
+}
+
+#menu li a {
+    color: #071F40;
+    text-decoration: none;
+    display: block;
+    padding: 8px;
+}
+
+#menu a:hover {
+    color: #DCE0E5;
+    background-color: #2C4870
+    }
+
+#menu .active a {
+    color: #DCE0E5;
+    background-color: #2C4870
+}
 body {
   background-image: url("bg.png");
+}
+
+#container {
+  background:#ffffff;
+  border: 1px solid #071F40;
+  min-width: 600px;
+  max-width: 1000px;
+  margin:auto;
 }
 
 #pealkiri1{
@@ -8,13 +58,13 @@ body {
   font-family: calibri;
 }
 
-#container a {
-  text-decoration: none;
-}
-
 .content {
   background-color: #ffffff;
   text-align: justify;
+}
+
+ .content img{
+   max-width: 600px;
 }
 
 #container .viide {
@@ -26,14 +76,6 @@ body {
 #container .viide:hover {
   color:#273737;
   text-decoration: underline;
-}
-
-#container {
-  background:#D4836A;
-  border: 1px solid #032336;
-  min-width: 600px;
-  max-width: 1000px;
-  margin:auto;
 }
 
 #container .div-keskel {
@@ -50,70 +92,20 @@ img:not(.validators){
   border-style: solid;
 }
 
-#menu1 ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
+#footer {
+  position: relative;
+  min-width: 600px;
+  max-width: 1000px;
+  background:#2C4870;
+  height: 31px;
+  padding: 5px 0;
+  width:100%;
+  margin:auto;
+  border: 1px solid #071F40;
 }
 
-#menu1 li {
-    float: left;
-    border-right: 1px solid #000;
-}
-
-#menu1 li a {
-    color: inherit;
-}
-
-#menu1 a:hover {
-    text-decoration: underline;
-    font-style: italic;
-    background-color: #D4836A;
-}
-
-#menu1 li:last-child {
-    border-right: none;
-}
-
-#menu1 li a {
-    display: block;
-    padding: 8px;
-    background-color: #ffd0aa;
-}
-
-#menu2 ol {
-    list-style-type: none;
-    margin: 10px;
-    padding: 0px;
-    overflow: hidden;
-}
-
-#menu2 li {
-    float: right;
-    border-left: 1px solid #000;
-}
-
-#menu2 li a {
-  color: inherit;
-}
-
-#menu2 a:hover {
-  text-decoration: underline;
-  font-style: italic;
-  background-color: #D4836A;
-}
-
-#menu2 li:last-child {
-    border-left: none;
-}
-
-#menu2 li a {
-    display: block;
-    padding: 4px;
-    background-color: #ffd0aa;
-}
-
-.content img {
-  float: left;
+#footer .validatorlogo {
+  width:88px;
+  height:31px;
+  float:right;
 }
