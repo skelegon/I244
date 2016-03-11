@@ -47,7 +47,7 @@ body {
 #container {
   background:#ffffff;
   border: 1px solid #071F40;
-  min-width: 600px;
+  min-width: 800px;
   max-width: 1000px;
   margin:auto;
 }
@@ -61,10 +61,19 @@ body {
 .content {
   background-color: #ffffff;
   text-align: justify;
+  padding: 10px;
 }
 
  .content img{
-   max-width: 600px;
+   max-width: 90%;
+}
+
+.content table  {
+  margin: 0 auto;
+}
+
+.content a{
+  text-decoration: none;
 }
 
 #container .viide {
@@ -89,12 +98,12 @@ body {
 }
 
 img:not(.validators){
-  border-style: solid;
+  border: 1px solid #071F40;
 }
 
 #footer {
   position: relative;
-  min-width: 600px;
+  min-width: 800px;
   max-width: 1000px;
   background:#2C4870;
   height: 31px;
