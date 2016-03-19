@@ -6,6 +6,15 @@
 		<meta charset="utf-8" />
 		<title>Kodune 4</title>
 		<link rel="stylesheet" type="text/css" href="style.css">
+		<script>
+			window.onload = function() {
+				  var d = document.getElementById("content");
+				  d.onclick = function(){
+				  this.style.left = window.innerWidth*Math.random()+"px";
+				  this.style.top = window.innerHeight*Math.random()+"px";
+				}
+			}
+		</script>
 	</head>
 
 	<body>
