@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<!-- saved from url=(0057)http://enos.itcollege.ee/~ttanav/VRI/Kodused/06/loop.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+	<title>Kodune Ülesanne</title>
+	<style type="text/css">
+	.active { background: skyblue; padding: 10px;}
+	</style>
+	<script type="text/javascript" src="./Kodune Ülesanne_files/jquery-1.11.0.min.js"></script><style type="text/css"></style>
+	<script type="text/javascript">
+	$(document).ready(function() {
+		var current = $('ul li:first');
+		current.addClass('active');
+
+		$('#next').click(function(){
+			$('ul li').removeClass('active');
+			if(current.is(':last-child')) {
+				current = $('ul li:first');
+			} else {
+				current = current.next();
+			}
+			current.addClass('active');
+		});
+
+		$('#prev').click(function(){
+			$('ul li').removeClass('active');
+			if(current.is(':first-child')) {
+				current = $('ul li:last');
+			} else {
+				current = current.prev();
+			}
+			current.addClass('active');
+		})
+	});
+	</script>
+</head>
+<body>
+<button id="next">edasi</button>
+<button id="prev">tagasi</button>
+
+<ul>
+<li>esimene</li>
+<li>teine</li>
+<li>kolmas</li>
+<li>neljas</li>
+</ul>
+
+
+</body></html>
