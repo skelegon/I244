@@ -1,7 +1,7 @@
 function test(){
   if (document.getElementById("images") != null) {
     var pildid = document.getElementById("images");
-    var pildid_array = pildid.getElementsByTagName("img");
+    var pildid_array = pildid.getElementsByTagName("a");
     var sulge = pildid.getElementsByTagName("sulge");
 
     for(var i = 0; i < pildid_array.length; i++){
@@ -13,9 +13,16 @@ function test(){
 
 function showDetails(el) {
   if (document.getElementById("hoidja") != null){
+     /*
     document.getElementById("suurpilt").src = el.parentNode.getAttribute("href");
     document.getElementById("suurpilt").onload = "suurus(this)";
     document.getElementById("inf").innerHTML = el.getAttribute("alt");
+    */
+    $.get(el.href, "html", function(data){
+        alert(data);
+	document.getElementById('sisu').innerHTML=data;
+    });
+
     document.getElementById("hoidja").style = "display:initial";
   }
   return false;

@@ -1,10 +1,9 @@
 <div id="images">
-    <?php foreach ($pildid as $pilt): ?>
-        <a href = <?php echo $pilt['big']?>>
-            <img src=<?php echo $pilt['small']?> alt=<?php echo $pilt['alt'] ?>>
-        </a>
-    <?php endforeach; ?>
-
+<?php
+  foreach ($pildid as $pilt){
+    echo '<a href="'.$pilt['big'].'"><img src="'.$pilt['small'].'" alt="'.$pilt['alt'].'" /></a>' . "\n";
+  }
+?>
 </div>
 <div id="hoidja" style="display:none;">
     <div id="taust"></div>
