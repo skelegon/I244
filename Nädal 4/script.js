@@ -1,7 +1,7 @@
 function test(){
   if (document.getElementById("images") != null) {
     var pildid = document.getElementById("images");
-    var pildid_array = pildid.getElementsByTagName("a");
+    var pildid_array = pildid.getElementsByTagName("src");
     var sulge = pildid.getElementsByTagName("sulge");
 
     for(var i = 0; i < pildid_array.length; i++){

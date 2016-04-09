@@ -1,4 +1,5 @@
 <?php
+
 $pildid = array(
   array('big'=>'Pictures\1.jpg', 'small'=>'Pictures\Thumbnails\t1.jpg', 'alt'=>'Autor: Tundmatu  Pealkiri: Kass1'),
   array('big'=>'Pictures\2.jpg', 'small'=>'Pictures\Thumbnails\t2.jpg', 'alt'=>'Autor: Tundmatu  Pealkiri: Kass2'),
@@ -9,6 +10,7 @@ $pildid = array(
   array('big'=>'Pictures\7.jpg', 'small'=>'Pictures\Thumbnails\t7.jpg', 'alt'=>'Autor: Tundmatu  Pealkiri: Kass7')
 );
 
+
 include_once('view/head.html');
 if (isset($_GET["mode"])) {
   switch($_GET["mode"]) {
@@ -16,7 +18,7 @@ if (isset($_GET["mode"])) {
       include ('view/Praktikum4.html'); break;
     case "galeriivaade":
       include ('view/Praktikum4_2.php'); break;
-    case "logiSisse":
+    case "logisisse":
       include ('view/Praktikum4_4.html'); break;
     case "registreeri":
       include ('view/Praktikum4_5.html'); break;
@@ -27,11 +29,10 @@ if (isset($_GET["mode"])) {
           $id = 0;
         } else {
           $pilt = $pildid[$id];
-          $eelmine = $_GET["eelmine"];
-          $jargmine = $_GET["jargmine"];
-          include ('pilt.html');
+          include ('view/pilt.html');
         }
       }
+
     default:
       include ('view/Praktikum4.html'); break;
   }
