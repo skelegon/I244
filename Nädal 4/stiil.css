@@ -173,3 +173,11 @@ img:not(.validators){
 #prev:hover, #next:hover{
 	background-color: rgba(255,255,255,0.1);
 }
+#prev {
+	left:0px;
+	background: url("Pictures/prev.png") center no-repeat;
+}
+#next {
+	right:0px;
+	background: url("Pictures/next.png") center no-repeat;
+}
