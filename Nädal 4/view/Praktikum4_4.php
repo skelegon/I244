@@ -1,6 +1,6 @@
 
     		<div id="login">
-		      <form action="Praktikum2_4.html" method="post">
+		      <form action="?mode=logisisse" method="POST">
 		        <table>
 		          <tr>
 		            <th>Kasutajanimi</th>
@@ -16,4 +16,9 @@
 		        </table>
                 <a href="?mode=registreeri">Sign up</a></br>
 		      </form>
+            <?php if (!empty($errors)):?>
+              <?php foreach($errors as $e):?>
+                <p style="color:red"><?php echo $e; ?></style>
+              <?php endforeach;?>
+            <?php endif;?>
     		</div>

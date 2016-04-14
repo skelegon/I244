@@ -22,6 +22,16 @@
     font-family: "Verdana";
 }
 
+#header a:hover {
+    background-color: #fff;
+    color: #AA3939;
+}
+
+#header a:focus {
+    background-color: #fff;
+    color: #AA3939;
+}
+
 #separator {
     background-color: #5f5f5f;
     height: 5px;
@@ -29,4 +39,95 @@
 
 .icon-bar {
     background-color: #ffffff;
+}
+
+#login-dp{
+    min-width: 250px;
+    padding: 14px 14px 0;
+    overflow:hidden;
+    background-color:#fff;
+    color: #AA3939;
+}
+
+#login-dp .help-block{
+    font-size:12px
+}
+#login-dp .bottom{
+    background-color:#5f5f5f;
+    border-top:2px solid #AA3939;
+    clear:both;
+    padding:14px;
+}
+#login-dp .social-buttons{
+    margin:12px 0
+}
+#login-dp .social-buttons a{
+    width: 49%;
+}
+#login-dp .form-group {
+    margin-bottom: 10px;
+}
+
+#forgotPW a{
+    color: #AA3939;
+    font-size: 12px;
+}
+
+.btn {
+    color: #fff;
+    background-color:#5f5f5f;
+    border: none;
+}
+
+.btn:hover {
+    color: #fff;
+    background-color:#AA3939;
+}
+
+.btn-fb{
+    color: #fff;
+    background-color:#5f5f5f;
+}
+
+.btn-fb:hover{
+    border-style: solid;
+    border-color: #AA3939;
+}
+
+.btn-tw{
+    color: #fff;
+    background-color:#5f5f5f;
+}
+
+.btn-tw:hover{
+    border-style: solid;
+    border-color: #AA3939;
+}
+
+@media(max-width:768px){
+    #login-dp{
+        background-color: inherit;
+        color: #5f5f5f;
+    }
+    #login-dp .bottom{
+        background-color: inherit;
+        border-top:0 none;
+    }
+}
+
+#time {
+    color: #ffffff;
+    font-size: 18px;
+    font-family: "Verdana";
+    margin:13px 13px 13px 13px;
+}
+
+#footer {
+  position: relative;
+  background:#5f5f5f;
+  color: #fff;
+  height: 31px;
+  padding: 5px 0;
+  width:100%;
+  margin:auto;
 }
