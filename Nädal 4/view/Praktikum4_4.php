@@ -1,10 +1,10 @@
-
     		<div id="login">
 		      <form action="?mode=logisisse" method="POST">
 		        <table>
 		          <tr>
 		            <th>Kasutajanimi</th>
-		            <th><input name="kasutajanimi" type="text"</input></th>
+		            <th><input name="kasutajanimi" type="text" <?php if (!empty($_POST["kasutajanimi"]))
+                echo "value=\"".htmlspecialchars($_POST["kasutajanimi"])."\" "?></input></th>
 		          </tr>
 		          <tr>
 		            <th>Parool</th>

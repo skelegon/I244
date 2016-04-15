@@ -19,25 +19,23 @@ function kuva_logisisse() {
       if(!empty($_POST["kasutajanimi"])){
         echo $_POST["kasutajanimi"];
       } else {
-        $error[]="kasutajanimi sisestamata!";
+        $errors[]="kasutajanimi sisestamata!";
       }
-
       if(!empty($_POST["parool"])){
-        echo "2";
+        echo $_POST["parool"];
       } else {
-        $error[]="parool sisestamata!";
+        $errors[]="parool sisestamata!";
       }
-  }
 
-  if (empty($errors)) {
-    // kõik OK
-    echo "kõik ok";
-  }
+      if (empty($errors)) {
+        // kõik OK
+        echo "kõik ok";
+      }
 
+  }
   include('view/head.html');
   include ('view/Praktikum4_4.php');
   include('view/foot.html');
-
 }
 
 function kuva_registreeri() {
@@ -75,6 +73,8 @@ function kuva_pilt() {
           $jargmine = $id;
         }
         include ('view/pilt.html');
+        $link = getimagesize($pilt['big']);
+        echo "Width: ".$link[0].", height: ".$link[1];
     }
   }
 }
