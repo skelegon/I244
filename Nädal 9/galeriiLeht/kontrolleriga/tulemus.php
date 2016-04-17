@@ -3,8 +3,8 @@
 	<h3>Valiku tulemus</h3>
 
 	<?php
-	if(!empty($_GET)){
-		echo 'Kasutaja valis pildi: '.$_GET['pilt'];
+	if(!empty($_POST)){
+		echo 'Kasutaja valis pildi: '.$_POST['pilt'];
 	} else {
 		echo "Kasutaja ei valinud pilti!";
 

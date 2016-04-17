@@ -13,9 +13,9 @@
 	);
 
 	echo 	'<div id="gallery">';
-
+ 
 	foreach($pildid as $pilt) {
-			echo '<img src="'.$pilt['big'].'" alt="'.$pilt['alt'].'"';
+		echo '<img src="'.$pilt['big'].'" alt="'.$pilt['alt'].'"/>';
 	}
 	echo '</div>';
 
