@@ -13,13 +13,25 @@
       </div>
       <div id="menu">
         <ul>
-          <li ><a href="?mode=pealeht">PEALEHT</a></li>
-          <li ><a href="?mode=galeriivaade">GALERII</a></li>
-          <li style="float:right"><a href="?mode=logisisse">LOGI SISSE</a></li>
-          <li style="float:right"><a href="?mode=registreeri">REGISTREERI</a></li>
+            <li ><a href="?mode=pealeht">PEALEHT</a></li>
+            <li ><a href="?mode=galeriivaade">GALERII</a></li>
+          <?php
+            if (!isset($_SESSION['user'])){
+                echo '<li style="float:right"><a href="?mode=logisisse">LOGI SISSE</a></li>';
+                echo '<li style="float:right"><a href="?mode=registreeri">REGISTREERI</a></li>';
+            } else {
+                echo '<li style="float:right"><a href="?mode=logivalja">LOGI VÄLJA</a></li>';
+                echo '<li style="float:right"><a href="?mode=pildivorm">PILDIVORM</a></li>';
+            }
+            ?>
         </ul>
       </div>
       <div class="header">
       </div>
-
+      <?php
+          if(isset($_SESSION['teade'])){
+              echo $_SESSION['teade'];
+          }
+          unset($_SESSION['teade']);
+      ?>
       <div class ="content">
