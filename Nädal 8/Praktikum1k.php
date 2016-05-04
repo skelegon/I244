@@ -39,15 +39,15 @@ else
     $l = mysqli_connect($host, $user, $pass, $db);
     mysqli_query($l, "SET CHARACTER SET UTF8") or
             die("Error, ei saa andmebaasi charsetti seatud");
-            
+
          $sql="INSERT INTO kkilgi_ssulev(IP_aadress) VALUES ($ips)";
-         
+
          if ($l->query($sql) === TRUE) {
    		 echo "New record created successfully";
 		} else {
     		echo "Error: " . $sql . "<br>" . $l->error;
 		}
-            
+
     mysqli_close($l);
     //Praktikum 2 Karit Kilgi ja Steve Sulev
 ?>

@@ -27,6 +27,7 @@ function startTime() {
     n + ", " + date + "." + month + "." + year + ", " + h + ":" + m + ":" + s;
     var t = setTimeout(startTime, 500);
 }
+
 function checkTime(i) {
     if (i < 10) {i = "0" + i};
     return i;

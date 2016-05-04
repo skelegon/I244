@@ -1,29 +1,39 @@
 <?php
   require_once("functions.php");
+  start_session();
 
-  include_once('view/head.html');
   if (isset($_GET["mode"])) {
     switch($_GET["mode"]) {
       case "home":
-        include ('view/home.html');
+        show_index();
         break;
-      case "view":
-        include ('view/view.html');
+      case "input":
+        show_input();
         break;
-      case "control":
-        include ('view/control.html');
-        break;
-      case "edit":
-        include ('view/edit.html');
+      case "output":
+        show_output();
         break;
       case "users":
-        include ('view/users.html');
+        show_users();
+        break;
+      case "about":
+        show_about();
+        break;
+      case "login":
+        if(isset($_SESSION['user'])){
+        show_index();
+      } else {
+        show_login();
+      }
+        break;
+      case "logout":
+        end_session();
+        show_index();
         break;
       default:
-        include ('view/home.html');
-      }
+        show_default();
+    }
   } else {
-    include ('view/home.html');
+    show_default();
   }
-  include_once('view/foot.html');
-?>
+  ?>
