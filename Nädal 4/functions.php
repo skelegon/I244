@@ -1,4 +1,27 @@
 <?php
+
+function connect_db(){
+  global $connection;
+  $host="localhost";
+  $user="test";
+  $pass="t3st3r123";
+  $db="test";
+  $connection = mysqli_connect($host, $user, $pass, $db) or die("ei saa mootoriga ühendust");
+  mysqli_query($connection, "SET CHARACTER SET UTF8") or die("Ei saanud baasi utf-8-sse - ".mysqli_error($connection));
+}
+
+function kuva_pildid(){
+	global $connection;
+	$pics = array();
+	$sql = "SELECT id, thumb, pilt, pealkiri, autor, punktid FROM 10153316_pildid";
+	$result = mysqli_query($connection, $sql);
+	while($rida = mysqli_fetch_assoc($result)){
+		$pics[] = $rida;
+	}
+	return $pics;
+}
+
+
 function alusta_sessioon(){
 	// siin ees võiks muuta ka sessiooni kehtivusaega, aga see pole hetkel tähtis
 	session_start();
@@ -71,7 +94,9 @@ function kuva_registreeri() {
 
 function kuva_pilt() {
 
-  $pildid = array(
+	$pildid = kuva_pildid();
+
+  /* $pildid = array(
     array('big'=>'Pictures/1.jpg', 'small'=>'Pictures/Thumbnails/t1.jpg', 'alt'=>'Autor: Tundmatu  Pealkiri: Kass1'),
     array('big'=>'Pictures/2.jpg', 'small'=>'Pictures/Thumbnails/t2.jpg', 'alt'=>'Autor: Tundmatu  Pealkiri: Kass2'),
     array('big'=>'Pictures/3.jpg', 'small'=>'Pictures/Thumbnails/t3.jpg', 'alt'=>'Autor: Tundmatu  Pealkiri: Kass3'),
@@ -80,6 +105,7 @@ function kuva_pilt() {
     array('big'=>'Pictures/6.jpg', 'small'=>'Pictures/Thumbnails/t6.jpg', 'alt'=>'Autor: Tundmatu  Pealkiri: Kass6'),
     array('big'=>'Pictures/7.jpg', 'small'=>'Pictures/Thumbnails/t7.jpg', 'alt'=>'Autor: Tundmatu  Pealkiri: Kass7')
   );
+	*/
 
     if (isset($_GET['id'])) {
       $id = $_GET['id'];
@@ -98,7 +124,7 @@ function kuva_pilt() {
           $jargmine = $id;
         }
         include ('view/pilt.html');
-        $link = getimagesize($pilt['big']);
+        $link = getimagesize($pilt['pilt']);
         echo "Width: ".$link[0].", height: ".$link[1];
     }
   }
@@ -108,6 +134,50 @@ function kuva_default() {
   include('view/head.html');
   include ('view/Praktikum4.html');
   include('view/foot.html');
+}
+
+function kuva_pic(){
+	global $connection;
+	if (!empty($_GET["id"])){
+		$sql="SELECT * FROM 10153316_pildid WHERE id=".mysqli_real_escape_string($connection, $_GET["id"]);
+		$result = mysqli_query($connection, $sql) or die("sellist pilti pole");
+	 	$pic= mysqli_fetch_assoc($result);
+		if ($pic) {
+			kuva_pildivorm();
+		}
+	}
+}
+
+function lae_pilt(){
+	global $connection;
+
+	$errors=array();
+	if (!empty($_POST)){
+		if (empty($_POST["autor"])) {
+			$errors[]="autor kohustuslik";
+		}
+		if (empty($_POST["pealkiri"])) {
+			$errors[]="pealkiri kohustuslik";
+		}
+		if (empty($_POST["suur_pilt"])) {
+			$errors[]="pilt kohustuslik";
+		}
+		if (empty($_POST["vaike_pilt"])) {
+			$errors[]="pilt kohustuslik";
+		}
+		if (empty($errors)){
+			$autor=mysqli_real_escape_string($connection, $_POST["autor"]);
+			$pealkiri=mysqli_real_escape_string($connection, $_POST["pilt"]);
+			$pilt=mysqli_real_escape_string($connection, $_POST["pilt"]);
+			$thumb=mysqli_real_escape_string($connection, $_POST["thumb"]);
+
+			$sql = "INSERT INTO 10153316_pildid (thumb, pilt, pealkiri, autor) VALUES ('$thumb', '$pilt', $pealkiri, '$autor')";
+			$result = mysqli_query($connection, $sql);
+			if ($result){
+				kuva_galeriivaade ();
+			}
+		}
+	}
 }
 
 

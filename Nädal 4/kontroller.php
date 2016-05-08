@@ -2,6 +2,7 @@
 
 require_once("functions.php");
 alusta_sessioon();
+connect_db();
 
 if (isset($_GET["mode"])) {
   switch($_GET["mode"]) {
