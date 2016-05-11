@@ -1,5 +1,11 @@
-<div id="images">
   <div id="images">
+    <?php
+      foreach (kuva_pildid() as $pilt){
+        echo '<a href="?mode=pilt&id='.$pilt['id'].'"><img src="'.$pilt['thumb'].'" alt="'.$pilt['pealkiri'].'" /></a>' . "\n";
+      }
+    ?>
+
+    <!--
     <a href="?mode=pilt&id=0">
       <img src="Pictures\Thumbnails\t1.jpg" alt="Autor: Tundmatu  Pealkiri: Kass1">
     </a>
@@ -21,18 +27,9 @@
     <a href="?mode=pilt&id=6">
       <img src="Pictures\Thumbnails\t7.jpg" alt="Autor: Tundmatu  Pealkiri: Kass7">
     </a>
+  -->
   </div>
 
-
-<?php
-/*
-  foreach ($pildid as $pilt){
-    echo '<a href="'.$pilt['big'].'"><img src="'.$pilt['small'].'" alt="'.$pilt['alt'].'" /></a>' . "\n";
-  } */
-?>
-
-
-</div>
 <div id="hoidja" style="display:none;">
     <div id="taust"></div>
     <div id="tabel">

@@ -1,5 +1,5 @@
 <?php
-
+// Ühendus andmebaasiga
 function connect_db(){
   global $connection;
   $host="localhost";
@@ -10,6 +10,8 @@ function connect_db(){
   mysqli_query($connection, "SET CHARACTER SET UTF8") or die("Ei saanud baasi utf-8-sse - ".mysqli_error($connection));
 }
 
+
+// Loob piltide massiivi ja lisab sinna kõik pildid andmebaasist
 function kuva_pildid(){
 	global $connection;
 	$pics = array();
@@ -21,12 +23,14 @@ function kuva_pildid(){
 	return $pics;
 }
 
-
+// loob sessiooni
 function alusta_sessioon(){
 	// siin ees võiks muuta ka sessiooni kehtivusaega, aga see pole hetkel tähtis
 	session_start();
 	}
 
+
+// lõpetab sessiooni
 function lopeta_sessioon(){
 	$_SESSION = array();
 	if (isset($_COOKIE[session_name()])) {
@@ -35,7 +39,10 @@ function lopeta_sessioon(){
 	session_destroy();
 }
 
+// lehtede kuvamise meetodid
+
 function kuva_pealeht () {
+  $test = "hello";
   include('view/head.html');
   include('view/Praktikum4.html');
   include('view/foot.html');
@@ -81,7 +88,7 @@ function kuva_logisisse() {
 
 function kuva_pildivorm() {
   include('view/head.html');
-  include('view/Praktikum4_6.html');
+  include('view/Praktikum4_6.php');
   include('view/foot.html');
 }
 
@@ -92,10 +99,9 @@ function kuva_registreeri() {
   include('view/foot.html');
 }
 
+// pildide kuvamine
 function kuva_pilt() {
-
 	$pildid = kuva_pildid();
-
   /* $pildid = array(
     array('big'=>'Pictures/1.jpg', 'small'=>'Pictures/Thumbnails/t1.jpg', 'alt'=>'Autor: Tundmatu  Pealkiri: Kass1'),
     array('big'=>'Pictures/2.jpg', 'small'=>'Pictures/Thumbnails/t2.jpg', 'alt'=>'Autor: Tundmatu  Pealkiri: Kass2'),
@@ -109,26 +115,32 @@ function kuva_pilt() {
 
     if (isset($_GET['id'])) {
       $id = $_GET['id'];
-      if(!is_numeric($id) || $id > count($pildid) || $id < 0){
-        $id = 0;
+      $ids = koik_id();
+
+      $find = array_search($id, $ids);
+
+      if($find !== false){
+        $pilt = $pildid[$find];
+        if ($find >= 1){
+          $eelmine = $ids[$find-1];
+        } else {
+          $eelmine = $ids[$find];
+        }
+        if ($find < count($pildid)-1) {
+          $jargmine = $ids[$find+1];
+        } else {
+        $jargmine = $ids[$find];
+        }
       } else {
-        $pilt = $pildid[$id];
-        if ($id >= 1){
-          $eelmine = $id-1;
-        } else {
-          $eelmine = $id;
-        }
-        if ($id < count($pildid)-1) {
-          $jargmine = $id+1;
-        } else {
-          $jargmine = $id;
-        }
-        include ('view/pilt.html');
-        $link = getimagesize($pilt['pilt']);
-        echo "Width: ".$link[0].", height: ".$link[1];
+        $pilt = $pildid[0];
+      }
+
+      include ('view/pilt.html');
+      $link = getimagesize($pilt['pilt']);
+      echo "Width: ".$link[0].", height: ".$link[1];
+
     }
   }
-}
 
 function kuva_default() {
   include('view/head.html');
@@ -136,15 +148,19 @@ function kuva_default() {
   include('view/foot.html');
 }
 
-function kuva_pic(){
+
+// hangib andmebaasitabelist konkreetse pildi info ja tagastab selle massiivina.
+function hangi_pildi_info(){
 	global $connection;
 	if (!empty($_GET["id"])){
 		$sql="SELECT * FROM 10153316_pildid WHERE id=".mysqli_real_escape_string($connection, $_GET["id"]);
 		$result = mysqli_query($connection, $sql) or die("sellist pilti pole");
 	 	$pic= mysqli_fetch_assoc($result);
-		if ($pic) {
-			kuva_pildivorm();
-		}
+		if (!empty($pic)) {
+		 return $pic;
+   } else {
+     return "";
+   }
 	}
 }
 
@@ -159,15 +175,15 @@ function lae_pilt(){
 		if (empty($_POST["pealkiri"])) {
 			$errors[]="pealkiri kohustuslik";
 		}
-		if (empty($_POST["suur_pilt"])) {
+		if (empty($_POST["pilt"])) {
 			$errors[]="pilt kohustuslik";
 		}
-		if (empty($_POST["vaike_pilt"])) {
+		if (empty($_POST["thumb"])) {
 			$errors[]="pilt kohustuslik";
 		}
 		if (empty($errors)){
 			$autor=mysqli_real_escape_string($connection, $_POST["autor"]);
-			$pealkiri=mysqli_real_escape_string($connection, $_POST["pilt"]);
+			$pealkiri=mysqli_real_escape_string($connection, $_POST["pealkiri"]);
 			$pilt=mysqli_real_escape_string($connection, $_POST["pilt"]);
 			$thumb=mysqli_real_escape_string($connection, $_POST["thumb"]);
 
@@ -176,10 +192,20 @@ function lae_pilt(){
 			if ($result){
 				kuva_galeriivaade ();
 			}
+      }
 		}
 	}
+
+
+function koik_id(){
+  global $connection;
+  $sql="SELECT id FROM 10153316_pildid";
+  $result = mysqli_query($connection, $sql) or die("error");
+
+  while($rida = mysqli_fetch_assoc($result)){
+    $ids[] = $rida['id'];
+  }
+
+  return $ids;
 }
-
-
-
 ?>

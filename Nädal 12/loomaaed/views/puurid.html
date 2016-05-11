@@ -1,0 +1,17 @@
+<?php
+//var_dump($puurid);
+foreach($puurid as $key => $puur){?>
+    <div>
+        <p>Puur nr: <?php echo $key?><p>
+        <?php
+        foreach($puur as $ok){
+        ?>
+            <img src="<?php echo $ok['liik']?>" alt="Test"><br>
+            <p>Nimi: <?php echo $ok['nimi']?>, vanus: <?php echo $ok['vanus']?></p>
+            <?php
+        }
+        ?>
+    </div>
+    <?php
+}
+?>

@@ -1,7 +1,8 @@
 <?php
 require_once('funk.php');
 session_start();
-connect_db();
+$_SESSION['user'] = "asdf";
+//connect_db();
 
 $page="pealeht";
 if (isset($_GET['page']) && $_GET['page']!=""){

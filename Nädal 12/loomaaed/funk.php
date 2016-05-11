@@ -3,16 +3,15 @@
 function connect_db(){
 	global $connection;
 	$host="localhost";
-	$user="test";
-	$pass="t3st3r123";
-	$db="test";
+  $user="test";
+  $pass="t3st3r123";
+  $db="test";
 	$connection = mysqli_connect($host, $user, $pass, $db) or die("ei saa ühendust mootoriga- ".mysqli_error());
 	mysqli_query($connection, "SET CHARACTER SET UTF8") or die("Ei saanud baasi utf-8-sse - ".mysqli_error($connection));
 }
 
-function logi(){
-	// siia on vaja funktsionaalsust (13. nädalal)
-
+function logi(){	// siia on vaja funktsionaalsust (13. nädalal)
+	session_start();
 	include_once('views/login.html');
 }
 
@@ -21,17 +20,28 @@ function logout(){
 	session_destroy();
 	header("Location: ?");
 }
+connect_db();
 
 function kuva_puurid(){
-	global $connection;
-	$puurid = array();
-	$sql="SELECT DISTINCT puur FROM 10153316_loomaaed";
-	$result=mysqli_query($connection, $sql);
-	while($puur = mysqli_fetch_assoc($result)){
-		$puurid[]=$puur;
-	}
+	/*
+	if (!isset($_SESSION['user'])) {
+					header("Location: loomaaed.php?page=login");
+		}*/
+		global $connection;
 
-	include_once('views/puurid.html');
+		/*$result = mysqli_query($connection, "SELECT * FROM 10153316_loomaaed WHERE puur IN (SELECT DISTINCT puur)") or die("");
+var_dump(mysqli_fetch_all($result));*/
+
+		$puurid = array();
+		$result = mysqli_query($connection, "SELECT DISTINCT puur as p FROM 10153316_loomaaed") or die("");
+		foreach ($result as $value) {
+			$loomad = mysqli_query($connection, "SELECT id, nimi, vanus, liik FROM 10153316_loomaaed WHERE puur = ".$value['p']) or die("");
+			foreach ($loomad as $loom) {
+				$puurid[$value['p']][] = $loom;
+			}
+		}
+		//var_dump($puurid);
+		include_once('views/puurid.html');
 }
 
 function lisa(){
