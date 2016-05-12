@@ -1,3 +1,15 @@
+
+  <?php
+  if(isset($_GET['msg'])){
+    $message = "";
+    if($_GET['msg']=="upload"){
+      $message = "Pildi lisamine õnnestus.";
+    } else if ($_GET['msg']=="change"){
+      $message = "Pildi muutmine õnnestus.";
+    }
+    echo '<div style="border:1px solid #000; background:#BCE954; padding:5px;margin-bottom:10px">'.$message.'</div>';
+  }
+  ?>
   <div id="images">
     <?php
       foreach (kuva_pildid() as $pilt){

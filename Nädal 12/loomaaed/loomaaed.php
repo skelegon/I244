@@ -1,7 +1,6 @@
 <?php
 require_once('funk.php');
 session_start();
-$_SESSION['user'] = "asdf";
 //connect_db();
 
 $page="pealeht";

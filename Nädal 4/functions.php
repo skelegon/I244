@@ -55,25 +55,31 @@ function kuva_galeriivaade () {
 }
 
 function kuva_logisisse() {
+  global $connection;
 
   if(!empty($_POST)) {
     $errors=array();
     if(!empty($_POST["kasutajanimi"])){
       echo $_POST["kasutajanimi"];
-      $username = htmlspecialchars($_POST['kasutajanimi']);
+      $username = mysqli_real_escape_string($connection,htmlspecialchars($_POST['kasutajanimi']));
     } else {
       $errors[]="kasutajanimi sisestamata!";
     }
     if(!empty($_POST["parool"])){
       echo $_POST["parool"];
-      $passwd = htmlspecialchars($_POST['parool']);
+      $passwd = mysqli_real_escape_string($connection, htmlspecialchars($_POST['parool']));
     } else {
       $errors[]="parool sisestamata!";
     }
 
     if (empty($errors)) {
-      if ($username=="kasutaja" && $passwd=="parool") {
-  			$_SESSION['user']=$username;
+      $query = "SELECT id, tyyp FROM 10153316_kasutajad WHERE kasutajanimi = '".$username."' AND parool = SHA1('".$passwd."')";
+      $result = mysqli_query($connection, $query) or die ("Päring ebaõnnestus!");
+      if (mysqli_num_rows($result) >= 1) {
+        $row = mysqli_fetch_assoc($result);
+        $id = $row['id'];
+        $tyyp = $row['tyyp'];
+        $_SESSION['user']=$username;
         $_SESSION['teade']="Sisselogimine õnnestus";
   			header("Location: ?mode=galeriivaade");
   		} else {
@@ -164,37 +170,7 @@ function hangi_pildi_info(){
 	}
 }
 
-function lae_pilt(){
-	global $connection;
 
-	$errors=array();
-	if (!empty($_POST)){
-		if (empty($_POST["autor"])) {
-			$errors[]="autor kohustuslik";
-		}
-		if (empty($_POST["pealkiri"])) {
-			$errors[]="pealkiri kohustuslik";
-		}
-		if (empty($_POST["pilt"])) {
-			$errors[]="pilt kohustuslik";
-		}
-		if (empty($_POST["thumb"])) {
-			$errors[]="pilt kohustuslik";
-		}
-		if (empty($errors)){
-			$autor=mysqli_real_escape_string($connection, $_POST["autor"]);
-			$pealkiri=mysqli_real_escape_string($connection, $_POST["pealkiri"]);
-			$pilt=mysqli_real_escape_string($connection, $_POST["pilt"]);
-			$thumb=mysqli_real_escape_string($connection, $_POST["thumb"]);
-
-			$sql = "INSERT INTO 10153316_pildid (thumb, pilt, pealkiri, autor) VALUES ('$thumb', '$pilt', $pealkiri, '$autor')";
-			$result = mysqli_query($connection, $sql);
-			if ($result){
-				kuva_galeriivaade ();
-			}
-      }
-		}
-	}
 
 
 function koik_id(){
