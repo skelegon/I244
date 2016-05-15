@@ -23,21 +23,31 @@
               <a class="navbar-brand" href="#"><img src="images/logo.png"></a>
             </div>
             <div class="collapse navbar-collapse" id="myNavbar">
-              <ul class="nav navbar-nav">
-                <li id="home" class="active"><a href="?mode=index">Home</a></li>
-                <li id="input"><a href="?mode=input">Input</a></li>
-                <li id="output"><a href="?mode=output">Output</a></li>
-                <li id="about"><a href="?mode=about">About</a></li>
-                <li id="users"><a href="?mode=users">Users</a></li>
-              </ul>
-              <ul class="nav navbar-nav navbar-right">
-                  <?php
-                    if (!isset($_SESSION['user'])){
-                        echo '<li><a href="?mode=login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>';
-                    } else {
-                        echo '<li><a href="?mode=logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>';
-                    }?>
-              </ul>
+                <div class="container-fluid">
+                  <ul class="nav navbar-nav">
+                    <li id="home" class="active"><a href="?mode=index">Home</a></li>
+                    <li id="buy"><a href="?mode=buy">Buy</a></li>
+                    <li class="dropdown">
+                      <a class="dropdown-toggle" data-toggle="dropdown" href="#">Sell
+                      <span class="caret"></span></a>
+                      <ul class="dropdown-menu">
+                        <li><a href="?mode=myProducts">My items</a></li>
+                        <li class="divider"></li>
+                        <li><a href="?mode=addproduct">New item</a></li>
+                      </ul>
+                    </li>
+                    <li id="about"><a href="?mode=about">About</a></li>
+                    <li id="users"><a href="?mode=users">Users</a></li>
+                  </ul>
+                  <ul class="nav navbar-nav navbar-right">
+                      <?php
+                        if (!isset($_SESSION['username'])){
+                            echo '<li><a href="?mode=login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>';
+                        } else {
+                            echo '<li><a href="?mode=logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>';
+                        }?>
+                  </ul>
+              </div>
             </div>
           </div>
         </nav>

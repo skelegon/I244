@@ -5,14 +5,13 @@
   echo "value=\"".htmlspecialchars($_POST["username"])."\" "?>>
   <label for="inputPassword" class="sr-only">Password</label>
   <input name="password" type="password" id="inputPassword" class="form-control" placeholder="Password" required>
-  <div class="checkbox">
-    <label>
-      <input type="checkbox" value="remember-me"> Remember me
-    </label>
-  </div>
   <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
   <br>
 </form>
+<p>Not yet an user? <a href="?mode=register">Sign up!</a></p>
+
+
+<!-- Print out errors -->
 <?php if (!empty($errors)):?>
   <?php foreach($errors as $e):?>
     <p style="color:red"><?php echo $e; ?></style>
