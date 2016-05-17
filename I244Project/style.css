@@ -50,7 +50,6 @@
   .form-horizontal {
       margin-left: auto;
       margin-right: auto;
-      max-width: 180px;
   }
 
   .inputform {
@@ -58,3 +57,66 @@
       margin-right: auto;
       max-width: 300px;
   }
+
+  .controls {
+      margin-left: auto;
+      margin-right: auto;
+      max-width: 200px;
+  }
+
+/* Product form */
+
+.Product_Button
+{
+    padding:20px;
+    border:1px solid #fff;
+}
+.margin50{
+    margin-top:50px
+}
+.productbtn:after {
+    font-family: "Glyphicons Halflings";
+    content: "\e114";
+    float: right;
+    margin-left: 15px;
+  }
+  /* Icon when the collapsible content is hidden */
+  .productbtn.collapsed:after {
+    content: "\e080";
+  }
+  .width450
+  {
+      width:450px
+  }
+  .margin50 {
+    margin-top:50px;
+}
+input[type=radio], input[type=checkbox]
+{
+    margin:4px !important;
+}
+.dimentions-width, .dimentions-height {
+    width:90%;
+    display:initial;
+}
+
+.Product_Content {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 500px;
+}
+
+/* */
+
+.slide-image {
+    width: 100%;
+}
+
+.carousel-holder {
+    margin-bottom: 30px;
+}
+
+.carousel-control,
+.item {
+    border-radius: 4px;
+}

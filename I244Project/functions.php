@@ -6,7 +6,7 @@ function connect_db(){
 	$host="localhost";
   $user="root";
   $pass="";
-  $db="database";
+  $db="";
 	$connection = mysqli_connect($host, $user, $pass, $db) or die("ei saa ühendust mootoriga- ".mysqli_error());
 	mysqli_query($connection, "SET CHARACTER SET UTF8") or die("Ei saanud baasi utf-8-sse - ".mysqli_error($connection));
 }
@@ -15,7 +15,7 @@ function connect_db(){
 function get_user_info(){
 	global $connection;
   $username = $_SESSION['username'];
-	$sql = "SELECT email, phone FROM 10153316_kylastajad WHERE username = '".$username."'";
+	$sql = "SELECT email, phone, user_ID, type FROM 10153316_user WHERE username = '".$username."'";
 	$res = mysqli_query($connection, $sql);
 	return mysqli_fetch_assoc($res);
 	}
@@ -39,16 +39,54 @@ function show_index () {
 }
 
 function show_buy () {
-	if (!isset($_SESSION['username'])) {
-			header("Location: ?mode=login");
-		} else {
-			global $connection;
-			$items = array();
-			$result = mysqli_query($connection, "SELECT * FROM 10153316_items");
-			return mysqli_fetch_all($result);
-		}
+	include('view/head.html');
+  include('view/buy.php');
+  include('view/footer.php');
 }
 
+function show_items(){
+	if (!isset($_SESSION['username'])) {
+		header("Location: ?mode=login");
+	} else {
+		global $connection;
+		$items = array();
+		$result = mysqli_query($connection, "SELECT * FROM 10153316_item");
+		return mysqli_fetch_all($result);
+	}
+}
+
+function show_usrs(){
+	$logged = get_user_info();
+	$admin = $logged['type'];
+	if (!isset($_SESSION['username']) || $admin != "admin") {
+		header("Location: ?mode=login");
+	} else {
+		global $connection;
+		$users = array();
+		$result = mysqli_query($connection, "SELECT * FROM 10153316_user WHERE type = 'user'");
+		return mysqli_fetch_all($result);
+	}
+}
+
+function show_my_items(){
+	if (!isset($_SESSION['username'])) {
+		header("Location: ?mode=login");
+	} else {
+		global $connection;
+		$items = array();
+		$user = get_user_info();
+		$user_ID = $user['user_ID'];
+		$sql = "SELECT * FROM 10153316_item WHERE seller_ID = $user_ID";
+		$result = mysqli_query($connection, $sql);
+		return mysqli_fetch_all($result);
+	}
+}
+
+function show_myproducts () {
+  include('view/head.html');
+  include('view/myproducts.php');
+  include('view/footer.php');
+}
 
 function show_about () {
   include('view/head.html');
@@ -58,11 +96,15 @@ function show_about () {
 
 function show_users () {
   include('view/head.html');
-  include('view/users.html');
+  include('view/users.php');
   include('view/footer.php');
 	}
 
-
+function show_addpictures() {
+	include('view/head.html');
+	include('view/addpictures.php');
+	include('view/footer.php');
+}
 
 function upload($name, $loc){
   $allowedExts = array("jpg", "jpeg", "gif", "png");
@@ -124,10 +166,12 @@ function show_login() {
 	      $errors[]="Password not entered!";
 	    }
 	    if (empty($errors)) {
-	      $query = "SELECT id FROM 10153316_kylastajad WHERE username = '".$username."' AND passw = SHA1('".$passwd."')";
-	      $result = mysqli_query($connection, $query) or die ("Päring ebaõnnestus!");
+	      $query = "SELECT user_ID FROM 10153316_user WHERE username = '".$username."' AND password = SHA1('".$passwd."')";
+	      $result = mysqli_query($connection, $query);
 				//var_dump(mysqli_error($connection));
 	      if (mysqli_num_rows($result) >= 1) {
+					$query ="UPDATE 10153316_user SET visits=visits+1";
+					$result = mysqli_query($connection, $query);
 	        $_SESSION['username']=$username;
 					header('Location: ?mode=index');
 	  		} else {
@@ -176,18 +220,46 @@ function register(){
 				$errors[]="Password not entered!";
 			}
 
+			if(!empty($_POST["forename"])){
+				echo $_POST["forename"];
+				$forename = mysqli_real_escape_string($connection, htmlspecialchars($_POST['forename']));
+			} else {
+				$errors[]="Forename not entered!";
+			}
+
+			if(!empty($_POST["surename"])){
+				echo $_POST["surename"];
+				$surename = mysqli_real_escape_string($connection, htmlspecialchars($_POST['surename']));
+			} else {
+				$errors[]="Surename not entered!";
+			}
+
+			if(!empty($_POST["usrtel"])){
+				echo $_POST["usrtel"];
+				$usrtel = mysqli_real_escape_string($connection, htmlspecialchars($_POST['usrtel']));
+			} else {
+				$errors[]="Phone number not entered!";
+			}
+
+			if(!empty($_POST["email"])){
+				echo $_POST["email"];
+				$email = mysqli_real_escape_string($connection, htmlspecialchars($_POST['email']));
+			} else {
+				$errors[]="E-mail address not entered!";
+			}
+
 			if ($passwd != $passwd_conf){
 				$errors[]="Entered passwords do not match";
 			} else if ($passwd == $passwd_conf && empty($errors)){
 
 				// Kontroll, kas  kasutajanimi juba andmebaasis olemas
-				$query = "SELECT username FROM 10153316_kylastajad WHERE username = '".$username."'";
+				$query = "SELECT username FROM 10153316_user WHERE username = '".$username."'";
 	      $result = mysqli_query($connection, $query);
 	      if (mysqli_num_rows($result) >= 1) {
 					$errors[]="Username already in use";
 				} else {
 					// lisab kasutja andmebaasi
-					$query = "INSERT INTO `10153316_kylastajad`(`username`, `passw`) VALUES ('".$username."',SHA1('".$passwd."'))";
+					$query = "INSERT INTO `10153316_user`(`username`, `password`, `phone`, `email`, `forename`, `surename`, `reg_date`) VALUES ('".$username."', SHA1('".$passwd."'), '".$usrtel."', '".$email."', '".$forename."', '".$surename."',now())";
 					$result = mysqli_query($connection, $query) or die ("Päring ebaõnnestus!");
 					$notifications[]="Register successful";
 				}

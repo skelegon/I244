@@ -9,12 +9,6 @@
       case "home":
         show_index();
         break;
-      case "input":
-        show_input();
-        break;
-      case "output":
-        show_output();
-        break;
       case "users":
         show_users();
         break;
@@ -40,8 +34,14 @@
       case "addproduct":
         show_addproduct();
         break;
+      case "myproducts":
+          show_myproducts();
+          break;
+      case "addpictures":
+        show_addpictures();
+        break;
       case "buy":
-        include_once("view/buy.php");
+        show_buy();
         break;
       default:
         show_default();

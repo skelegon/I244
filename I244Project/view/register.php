@@ -25,6 +25,34 @@
     </div><br>
 
     <div class="control-group">
+      <label class="control-label"  for="forename">Forename</label>
+      <div class="controls">
+        <input type="text" id="forename" name="forename" placeholder="" class="input-xlarge">
+      </div>
+    </div><br>
+
+    <div class="control-group">
+      <label class="control-label"  for="surename">Surename</label>
+      <div class="controls">
+        <input type="text" id="surename" name="surename" placeholder="" class="input-xlarge">
+      </div>
+    </div><br>
+
+    <div class="control-group">
+      <label class="control-label"  for="usrtel">Phone number</label>
+      <div class="controls">
+        <input type="tel" id="usrtel" name="usrtel" placeholder="" class="input-xlarge">
+      </div>
+    </div><br>
+
+    <div class="control-group">
+      <label class="control-label"  for="email">E-mail address</label>
+      <div class="controls">
+        <input type="e-mail" id="email" name="email" placeholder="" class="input-xlarge">
+      </div>
+    </div><br>
+
+    <div class="control-group">
       <div class="controls">
         <button class="btn btn-lg btn-primary btn-block" type="submit">Register</button>
       </div>
