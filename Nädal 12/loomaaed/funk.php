@@ -11,11 +11,11 @@ function connect_db(){
 }
 
 function logi(){
-	if (isset($_SESSION['user'])) {
+	if (isset($_SESSION['username'])) {
 		kuva_puurid();
 	} else {
 		global $connection;
-		if(!empty($_POST)) {
+		if(!empty($_POST))
 	    $errors=array();
 	    if(!empty($_POST["user"])){
 	      echo $_POST["user"];
@@ -31,12 +31,15 @@ function logi(){
 	    }
 
 	    if (empty($errors)) {
-	      $query = "SELECT id FROM 10153316_kylastajad WHERE username = '".$username."' AND passw = SHA1('".$passwd."')";
+	      $query = "SELECT id, roll FROM 10153316_kylastajad WHERE username = '".$username."' AND passw = SHA1('".$passwd."')";
 	      $result = mysqli_query($connection, $query);
 				//var_dump(mysqli_error($connection));
 	      if (mysqli_num_rows($result) >= 1) {
+					$row = mysqli_fetch_assoc($result);
+					$roll = $row['roll'];
 	        $_SESSION['user']=$username;
-					header('Location: ?page=loomad');
+					$_SESSION['roll']=$roll;
+					header('Location: ?mode=index');
 	  		} else {
 	  			echo "Vale kasutajanimi või parool! <a href=\"?mode=login\">Tagasi</a>";
 	  		}
@@ -44,7 +47,6 @@ function logi(){
 	  }
 	   include('views/login.html');
 	}
-}
 
 function logout(){
 	$_SESSION=array();
@@ -72,7 +74,7 @@ function kuva_puurid(){
 
 function lisa(){
 
-	if (!isset($_SESSION['user'])) {
+	if (!isset($_SESSION['user']) || $_SESSION['roll'] != 'admin') {
 		include_once('views/login.html');
 	} else {
 		$errors=array();
@@ -134,4 +136,58 @@ function upload($name){
 	}
 }
 
+function hangi_loom($id){
+	global $connection;
+	$query = "SELECT * FROM 10153316_loomaaed WHERE id = ".mysqli_real_escape_string($connection, $id)."";
+	$result = mysqli_query($connection, $query);
+	//var_dump(mysqli_error($connection));
+	if (mysqli_num_rows($result) >= 1) {
+		return mysqli_fetch_assoc($result);
+	} else {
+		include_once('views/puurid.html');
+	}
+}
+
+function muuda(){
+	if (!isset($_SESSION['user']) || $_SESSION['roll'] != 'admin') {
+		include_once('views/login.html');
+	} else {
+		$errors=array();
+		if (!empty($_POST)){
+			if (empty($_POST["id"])) {
+				kuva_puurid();
+			} else {
+				$id = $_POST["id"];
+			}
+			if (empty($_POST["nimi"])) {
+				$errors[]="nimi kohustuslik";
+			}
+			if (empty($_POST["puur"])) {
+				$errors[]="puur kohustuslik";
+			}
+			if (empty($errors)){
+				global $connection;
+				$nimi=mysqli_real_escape_string($connection, $_POST["nimi"]);
+				$puur=mysqli_real_escape_string($connection, $_POST["puur"]);
+				$liik=mysqli_real_escape_string($connection, $_FILES["liik"]["name"]);
+				$id= mysqli_real_escape_string($connection, $_POST["id"]);
+
+				$sql = "UPDATE 10153316_loomaaed SET nimi='$nimi', puur='$puur' WHERE id = '$id'";
+				$result = mysqli_query($connection, $sql);
+				var_dump(mysqli_error($connection));
+				if (!$result) {
+					echo "Pildi muutmine ebaõnnestus.";
+				} else {
+					if (!empty($_FILES["liik"]["name"])) {
+						$sql = "UPDATE 10153316_loomaaed SET liik='pildid/".$liik."' WHERE id = '$id'";
+						$result = mysqli_query($connection, $sql);
+						kuva_puurid();
+					}
+				}
+		include_once('views/editvorm.html');
+		}
+	}
+	include_once('views/editvorm.html');
+}
+}
 ?>

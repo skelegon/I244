@@ -1,17 +1,20 @@
 <?php
 //var_dump($puurid);
 foreach($puurid as $key => $puur){?>
-    <div>
+    <div style="border:1px solid #000; margin: 10px; padding: 5px; float:left">
         <p>Puur nr: <?php echo $key?><p>
         <?php
         foreach($puur as $ok){
         ?>
-            <img src="<?php echo $ok['liik']?>" alt="Test"><br>
-            <p>Nimi: <?php echo $ok['nimi']?>, vanus: <?php echo $ok['vanus']?></p>
+            <img src="<?php echo $ok['liik']?>" alt="Test"><br />
+            Nimi: <?php echo $ok['nimi']?>, vanus: <?php echo $ok['vanus']?><br />
             <?php
-        }
-        ?>
-    </div>
-    <?php
+            if ($_SESSION['roll'] = 'admin') {
+                echo '<a href="?page=muuda&id='.$ok['id'].'">?page=muuda&id='.$ok['id'].'</a><br />';
+            }
+            echo '<br />';
+    }
+    echo "</div>";
 }
+var_dump(hangi_loom(1));
 ?>
