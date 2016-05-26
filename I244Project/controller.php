@@ -28,6 +28,9 @@
         end_session();
         show_index();
         break;
+      case "item":
+        view_item();
+        break;
       case "register":
         register();
         break;

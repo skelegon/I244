@@ -52,7 +52,6 @@ if (!empty($_POST)){
 		$name=mysqli_real_escape_string($connection, $_POST["name"]);
 		$condition=mysqli_real_escape_string($connection, $_POST["condition"]);
 		$qty=mysqli_real_escape_string($connection, $_POST["qty"]);
-		$unitprice=mysqli_real_escape_string($connection, $_POST["unitprice"]);
 		$unit=mysqli_real_escape_string($connection, $_POST["unit"]);
 		$usrtel=mysqli_real_escape_string($connection, $_POST["usrtel"]);
 		$email=mysqli_real_escape_string($connection, $_POST["email"]);
@@ -74,7 +73,7 @@ if (!empty($_POST)){
 		echo "</pre>";
 */
 
-		$sql = "INSERT INTO 10153316_item (name, cond, quantity, unit_price, unit, thumbnail, phone, email, description, seller_ID) VALUES ('$name', '$condition', '$qty', '$unitprice', '$unit', 'pictures/".$p."', '$usrtel', '$email', '$description', $user_ID)";
+		$sql = "INSERT INTO 10153316_item (name, cond, quantity, unit, thumbnail, phone, email, description, seller_ID) VALUES ('$name', '$condition', '$qty', '$unit', 'pictures/".$p."', '$usrtel', '$email', '$description', $user_ID)";
 		$result = mysqli_query($connection, $sql);
 
 		if (!$result) {
@@ -84,7 +83,6 @@ if (!empty($_POST)){
 			$name = "";
 			$qty =  "";
 			$unit = "";
-			$unitprice ="";
 			$description="";
 		}
 } else {
@@ -92,14 +90,13 @@ if (!empty($_POST)){
 	$condition = isset($_POST['condition']) ? $_POST['condition'] : "";
 	$qty = isset($_POST['qty']) ? $_POST['qty'] : "";
 	$unit = isset($_POST['unit']) ? $_POST['unit'] : "";
-	$unitprice = isset($_POST['unitprice']) ? $_POST['unit'] : "";
 	$description = isset($_POST['description']) ? $_POST['description'] : "";
 	$category = isset($_POST['category']) ? $_POST['category'] : "";
 }
 }
 ?>
 
-<h1>Sell an item</h1>
+<h1>Add an item</h1>
   <div class="Product_Content">
       <form class="form-horizontal" action='?mode=addproduct' method="POST" enctype="multipart/form-data">
           <fieldset>
@@ -149,13 +146,6 @@ if (!empty($_POST)){
                       <label class="col-lg-2"  for="Name">Unit</label>
                       <div class="col-lg-4">
                           <input type="text" name="unit" placeholder="pcs" value="<?=$unit?>">
-                      </div>
-                </div>
-
-                <div class="col-lg-12 form-group margin50">
-                      <label class="col-lg-2"  for="Name">Unit price</label>
-                      <div class="col-lg-4">
-                          <input type="text" name="unitprice" placeholder="10" value="<?=$unitprice?>">€/unit
                       </div>
                 </div>
 

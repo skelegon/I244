@@ -4,9 +4,9 @@
 function connect_db(){
 	global $connection;
 	$host="localhost";
-  $user="root";
-  $pass="";
-  $db="";
+  $user="test";
+  $pass="t3st3r123";
+  $db="test";
 	$connection = mysqli_connect($host, $user, $pass, $db) or die("ei saa ühendust mootoriga- ".mysqli_error());
 	mysqli_query($connection, "SET CHARACTER SET UTF8") or die("Ei saanud baasi utf-8-sse - ".mysqli_error($connection));
 }
@@ -273,4 +273,17 @@ function register(){
 	}
 }
 
+function view_item(){
+	include('view/head.html');
+	include('view/item.php');
+	include('view/footer.php');
+}
+
+function get_item_info(){
+	global $connection;
+	$itemID = $_GET['id'];
+	$sql = "SELECT * FROM 10153316_item WHERE item_ID = '".$itemID."'";
+	$res = mysqli_query($connection, $sql);
+	return mysqli_fetch_assoc($res);
+}
 ?>
