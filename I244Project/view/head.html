@@ -35,10 +35,19 @@
                         <li><a href="?mode=addproduct">New item</a></li>
                         <li class="divider"></li>
                         <li><a href="?mode=traderequests">Trade requests</a></li>
+                        <li class="divider"></li>
+                        <li><a href="?mode=notifications">Notifications</a></li>
                       </ul>
                     </li>
                     <li id="about"><a href="?mode=about">About</a></li>
-                    <li id="users"><a href="?mode=users">Users</a></li>
+                    <?php
+                    $admin = get_user_info()['type'];
+                    if ($admin == 'admin'){?>
+                        <li id="users"><a href="?mode=users">Users</a></li>
+                        <li id="allitems"><a href="?mode=allitems">Items</a></li>
+                    <?php }
+                    ?>
+
                   </ul>
                   <ul class="nav navbar-nav navbar-right">
                       <?php

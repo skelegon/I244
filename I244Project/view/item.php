@@ -13,11 +13,44 @@ echo '<div class="row">
     </div>
   </div>
 </div>';
-?>
 
-<h1>Propose a trade</h1>
+
+	if(isset($_SESSION['username'])){
+		$info = get_user_info();
+		$user_ID = $info['user_ID'];
+	} else {
+		show_login();
+	}
+	$errors=array();
+
+	if (!empty($_POST)){
+		if (empty($_POST["trade"])) {
+			$errors[]="Choose an item to trade!";
+		}
+
+		if (empty($errors)){
+			global $connection;
+			$comment=mysqli_real_escape_string($connection, $_POST["comment"]);
+			$sellitem=mysqli_real_escape_string($connection, $_POST["trade"]);
+      $buyitem=mysqli_real_escape_string($connection, $item['item_ID']);
+
+      $change_status = "UPDATE 10153316_item SET status = '2' WHERE item_ID = $sellitem";
+      $res = mysqli_query($connection, $change_status);
+
+			$sql="INSERT INTO 10153316_request(sellitem_ID, buyitem_ID, comment, status) VALUES ('$sellitem', '$buyitem', '$comment', '2')";
+
+			$result = mysqli_query($connection, $sql);
+			if (!$result) {
+				$errors[] = "Request failed";
+			} else {
+				$notifications[] = "Upload successful";
+			}
+	  }
+  }
+
+?>
   <div class="Product_Content">
-      <form class="form-horizontal" action='' method="POST" enctype="multipart/form-data">
+      <form class="form-horizontal" action='controller.php?mode=item&id=<?=$_GET['id']?>' method="POST" enctype="multipart/form-data">
           <fieldset>
               <h4>Propose a trade</h4>
 								<div class="col-lg-12 form-group margin50">
@@ -29,10 +62,10 @@ echo '<div class="row">
                         $user = get_user_info();
                         $user_ID = $user['user_ID'];
                         $username = $_SESSION['username'];
-												$fetch_items = "SELECT name FROM 10153316_item WHERE seller_ID = $user_ID";
+												$fetch_items = "SELECT item_ID, name FROM 10153316_item WHERE seller_ID = $user_ID AND status ='1'";
 												$result = mysqli_query($connection, $fetch_items);
 												while($row = mysqli_fetch_assoc($result)) {
-													 echo "<option value=".$row["name"].">".$row["name"]."</option>";
+													 echo "<option value=".$row["item_ID"].">".$row["name"]."</option>";
 												}
 												?>
 				            </select>
@@ -51,3 +84,15 @@ echo '<div class="row">
 							</div>
         </fieldset>
       </form>
+      <?php if (isset($errors)):?>
+    			<?php foreach($errors as $error):?>
+    				<div style="color:red;"><?php echo htmlspecialchars($error); ?></div>
+    			<?php endforeach;?>
+    	<?php endif;?>
+
+    	<?php if (isset($notifications)):?>
+    			<?php foreach($notifications as $notification):?>
+    				<div style="color:green;"><?php echo htmlspecialchars($notification); ?></div>
+    			<?php endforeach;?>
+    	<?php endif;?>
+  </div>

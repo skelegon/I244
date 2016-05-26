@@ -2,6 +2,12 @@
   <div class="row">
 
     <?php
+
+    if(isset($_GET['del'])){
+      $message = delete_product($_GET['del']);
+      echo '<div style="border:1px solid #000; padding: 5px; background-color:orange">'.$message.'</div>';
+    }
+
       $items = show_my_items();
       foreach($items as $key => $value){
         echo '<div class="row">
@@ -14,6 +20,9 @@
                 <p>'.$value[9].'</p>
               </div>
             </div>
+          </div>
+          <div class ="controls">
+            <a href="controller.php?mode=myproducts&del='.$value[0].'" style="border:1px solid #000; padding:5px; background-color:#ccc">Delete</a></br>
           </div>
         </div>';
       }

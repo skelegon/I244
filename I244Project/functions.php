@@ -44,13 +44,47 @@ function show_buy () {
   include('view/footer.php');
 }
 
-function show_items(){
+function show_notifications () {
+	include('view/head.html');
+  include('view/notifications.php');
+  include('view/footer.php');
+}
+
+function show_allitems () {
+	include('view/head.html');
+  include('view/allitems.php');
+  include('view/footer.php');
+}
+
+function show_items($cat = null){
 	if (!isset($_SESSION['username'])) {
 		header("Location: ?mode=login");
 	} else {
 		global $connection;
 		$items = array();
-		$result = mysqli_query($connection, "SELECT * FROM 10153316_item");
+		$user = get_user_info()['user_ID'];
+		$sql = "SELECT * FROM 10153316_item WHERE status = '1' AND seller_ID <> $user";
+		if($cat != null){
+			$sql = "SELECT * FROM 10153316_item WHERE status = '1' AND category_ID = '".mysqli_real_escape_string($connection, $cat)."'";
+		}
+		$result = mysqli_query($connection, $sql);
+		return mysqli_fetch_all($result);
+	}
+}
+
+function is_admin(){
+	$type = get_user_info()['type'];
+	return $type == 'admin';
+}
+
+function list_all_items(){
+	if (!is_admin()){
+		header("Location: ?mode=login");
+	} else {
+		global $connection;
+		$items = array();
+		$sql = "SELECT * FROM 10153316_item";
+		$result = mysqli_query($connection, $sql);
 		return mysqli_fetch_all($result);
 	}
 }
@@ -76,10 +110,171 @@ function show_my_items(){
 		$items = array();
 		$user = get_user_info();
 		$user_ID = $user['user_ID'];
-		$sql = "SELECT * FROM 10153316_item WHERE seller_ID = $user_ID";
+		$sql = "SELECT * FROM 10153316_item WHERE seller_ID = $user_ID AND status = '1'";
 		$result = mysqli_query($connection, $sql);
 		return mysqli_fetch_all($result);
 	}
+}
+
+function show_my_requests(){
+	if (!isset($_SESSION['username'])) {
+		header("Location: ?mode=login");
+	} else {
+		global $connection;
+		$items = array();
+		$user = get_user_info();
+		$user_ID = $user['user_ID'];
+		$sql = "SELECT * FROM `10153316_request` WHERE sellitem_ID in (select item_ID FROM 10153316_item where seller_ID = '$user_ID') AND status = 2";
+		$result = mysqli_query($connection, $sql);
+		return mysqli_fetch_all($result);
+	}
+}
+
+function show_incoming_requests(){
+	if (!isset($_SESSION['username'])) {
+		header("Location: ?mode=login");
+	} else {
+		global $connection;
+		$items = array();
+		$user = get_user_info();
+		$user_ID = $user['user_ID'];
+		$sql = "SELECT * FROM `10153316_request` WHERE buyitem_ID in (select item_ID FROM 10153316_item where seller_ID = '$user_ID') AND status = 2";
+		$result = mysqli_query($connection, $sql);
+		return mysqli_fetch_all($result);
+	}
+}
+
+function show_accepted_requests(){
+	if (!isset($_SESSION['username'])) {
+		header("Location: ?mode=login");
+	} else {
+		global $connection;
+		$items = array();
+		$user = get_user_info();
+		$user_ID = $user['user_ID'];
+		$sql = "SELECT * FROM `10153316_request` WHERE sellitem_ID in (select item_ID FROM 10153316_item where seller_ID = '$user_ID') AND status = 4";
+		$result = mysqli_query($connection, $sql);
+		return mysqli_fetch_all($result);
+	}
+}
+
+function show_declined_requests(){
+	if (!isset($_SESSION['username'])) {
+		header("Location: ?mode=login");
+	} else {
+		global $connection;
+		$items = array();
+		$user = get_user_info();
+		$user_ID = $user['user_ID'];
+		$sql = "SELECT * FROM `10153316_request` WHERE sellitem_ID IN (SELECT item_ID FROM 10153316_item WHERE seller_ID = '$user_ID') AND status = 5";
+		$result = mysqli_query($connection, $sql);
+		return mysqli_fetch_all($result);
+	}
+}
+
+function cancel_my_request($id){
+	global $connection;
+	$sql = "UPDATE 10153316_request SET status='3' WHERE request_ID='".mysqli_real_escape_string($connection, $id)."'";
+	$result = mysqli_query($connection, $sql);
+
+	$item_status = "UPDATE 10153316_item SET status='1' WHERE item_ID = (SELECT sellitem_ID FROM 10153316_request WHERE request_ID = '$id')";
+
+	return "Successfully deleted: ..";
+}
+
+function cancel_user_request($id){
+	global $connection;
+	$sql = "UPDATE 10153316_request SET status='3' WHERE seller_ID='".mysqli_real_escape_string($connection, $id)."'";
+	$result = mysqli_query($connection, $sql);
+	$sql = "UPDATE 10153316_request SET status='3' WHERE seller_ID='".mysqli_real_escape_string($connection, $id)."'";
+	$result = mysqli_query($connection, $sql);
+	return "Successfully cancelled user requests: ..";
+}
+
+function suspend_user_items($id) {
+	global $connection;
+	$get_status = "SELECT status FROM 10153316_item WHERE seller_ID='".mysqli_real_escape_string($connection, $id)."'";
+	$s = mysqli_query($connection, $get_status);
+	$status = mysqli_fetch_assoc($s)['status'];
+
+	$msg = "No item statuses were changed";
+	$s = 1;
+	if($status == 0) {
+		$s = 1;
+		$msg = "Successfully un-suspended user items: ..";
+	} else if ($status == 1) {
+		$s = 0;
+	 	$msg = "Successfully suspended user items: ..";
+	}
+
+	$sql = "UPDATE 10153316_item SET status='".$s."' WHERE seller_ID = '$id'";
+  mysqli_query($connection, $sql);
+
+	return $msg;
+}
+
+function remove_my_request($id){
+	global $connection;
+	$sql = "UPDATE 10153316_request SET status='1' WHERE request_ID='".mysqli_real_escape_string($connection, $id)."'";
+	$result = mysqli_query($connection, $sql);
+	return "Successfully removed: ..";
+}
+
+function delete_product($id){
+	global $connection;
+	$sql = "UPDATE 10153316_item SET status='2' WHERE item_ID='".mysqli_real_escape_string($connection, $id)."'";
+	$result = mysqli_query($connection, $sql);
+	return "Successfully deleted: ..";
+}
+
+function product_status($id){
+	if (!is_admin()){
+		header("Location: ?mode=login");
+	} else {
+		global $connection;
+		$status = get_item_info($id)['status'];
+		if ($status == 1){
+			$sql = "UPDATE 10153316_item SET status='2' WHERE item_ID='".mysqli_real_escape_string($connection, $id)."'";
+			$result = mysqli_query($connection, $sql);
+			return "Successfully deleted: ..";
+		} else if($status == 2) {
+			$sql = "UPDATE 10153316_item SET status='1' WHERE item_ID='".mysqli_real_escape_string($connection, $id)."'";
+			$result = mysqli_query($connection, $sql);
+			return "Successfully deleted: ..";
+		}
+	return "No changes";
+}
+}
+
+function accept_request($id){
+	global $connection;
+	$sql = "UPDATE 10153316_request SET status='4' WHERE request_ID='".mysqli_real_escape_string($connection, $id)."'";
+	$result = mysqli_query($connection, $sql);
+
+	$first_item = "SELECT buyitem_ID FROM 10153316_request WHERE request_ID='".mysqli_real_escape_string($connection, $id)."'";
+	$get_first =mysqli_query($connection, $first_item);
+	$update_first="UPDATE 10153316_item SET status='0' WHERE item_ID = ".mysqli_fetch_assoc($get_first)['buyitem_ID']."";
+	$first_result=mysqli_query($connection, $update_first);
+
+	$second_item = "SELECT sellitem_ID FROM 10153316_request WHERE request_ID='".mysqli_real_escape_string($connection, $id)."'";
+	$get_second =mysqli_query($connection, $second_item);
+	$update_second="UPDATE 10153316_item SET status='0' WHERE item_ID = ".mysqli_fetch_assoc($get_second)['sellitem_ID']."";
+	$second_result=mysqli_query($connection, $update_second);
+
+	return "Successfully accepted: ..";
+}
+
+function decline_request($id){
+	global $connection;
+	$sql = "UPDATE 10153316_request SET status='5' WHERE request_ID='".mysqli_real_escape_string($connection, $id)."'";
+	$result = mysqli_query($connection, $sql);
+	return "Successfully declined: ..";
+}
+
+function show_requests() {
+	include('view/head.html');
+	include('view/traderequests.php');
+	include('view/footer.php');
 }
 
 function show_myproducts () {
@@ -109,7 +304,7 @@ function show_addpictures() {
 function upload($name, $loc){
   $allowedExts = array("jpg", "jpeg", "gif", "png");
   $allowedTypes = array("image/gif", "image/jpeg", "image/png","image/pjpeg");
-  $extension = end(explode(".", $_FILES[$name]["name"]));
+  $extension = end((explode(".", $_FILES[$name]["name"])));
 
   if ( in_array($_FILES[$name]["type"], $allowedTypes)
    && ($_FILES[$name]["size"] < 100000) // see on 100kb
@@ -279,11 +474,33 @@ function view_item(){
 	include('view/footer.php');
 }
 
-function get_item_info(){
+function get_item_info($id = null){
 	global $connection;
-	$itemID = $_GET['id'];
-	$sql = "SELECT * FROM 10153316_item WHERE item_ID = '".$itemID."'";
+	$i = "";
+	if($id != null){
+		$i = $id;
+	} else {
+		$i = $_GET['id'];
+	}
+	$sql = "SELECT * FROM 10153316_item WHERE item_ID = '".$i."'";
 	$res = mysqli_query($connection, $sql);
 	return mysqli_fetch_assoc($res);
+}
+
+function suspend_user($id){
+	global $connection;
+	$get_status = "SELECT status FROM 10153316_user WHERE user_ID='".mysqli_real_escape_string($connection, $id)."'";
+	$status = mysqli_fetch_assoc(mysqli_query($connection, $get_status))['status'];
+	if ($status == 1) {
+		$sql = "UPDATE 10153316_user SET status='0' WHERE user_ID='".mysqli_real_escape_string($connection, $id)."'";
+		$result = mysqli_query($connection, $sql);
+		cancel_user_request($id);
+		suspend_user_items($id);
+		return "Successfully suspended: ..";
+	}
+	$sql = "UPDATE 10153316_user SET status='1' WHERE user_ID='".mysqli_real_escape_string($connection, $id)."'";
+	$result = mysqli_query($connection, $sql);
+	suspend_user_items($id);
+	return "Successfully un-suspended: ..";
 }
 ?>

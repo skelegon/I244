@@ -14,7 +14,6 @@ $errors=array();
 $name = "";
 $qty = "";
 $unit = "";
-$unitprice ="";
 $description="";
 
 if (!empty($_POST)){
@@ -72,8 +71,7 @@ if (!empty($_POST)){
 		var_dump($p);
 		echo "</pre>";
 */
-
-		$sql = "INSERT INTO 10153316_item (name, cond, quantity, unit, thumbnail, phone, email, description, seller_ID) VALUES ('$name', '$condition', '$qty', '$unit', 'pictures/".$p."', '$usrtel', '$email', '$description', $user_ID)";
+		$sql = "INSERT INTO 10153316_item (name, cond, quantity, unit, thumbnail, phone, email, description, seller_ID, category_ID) VALUES ('$name', '$condition', '$qty', '$unit', 'pictures/".$p."', '$usrtel', '$email', '$description', '$user_ID', '$category')";
 		$result = mysqli_query($connection, $sql);
 
 		if (!$result) {
@@ -114,11 +112,11 @@ if (!empty($_POST)){
                     <select name="category">
 											<?php
 												global $connection;
-												$fetch_category = "SELECT category FROM 10153316_category";
+												$fetch_category = "SELECT category_ID, category FROM 10153316_category";
 												$result = mysqli_query($connection, $fetch_category);
 
 												while($row = mysqli_fetch_assoc($result)) {
-													 echo "<option value=".$row["category"].">".$row["category"]."</option>";
+													 echo "<option value=".$row["category_ID"].">".$row["category"]."</option>";
 												}
 												?>
 				            </select>

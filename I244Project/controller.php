@@ -31,6 +31,9 @@
       case "item":
         view_item();
         break;
+      case "notifications":
+        show_notifications();
+        break;
       case "register":
         register();
         break;
@@ -45,6 +48,12 @@
         break;
       case "buy":
         show_buy();
+        break;
+      case "traderequests":
+        show_requests();
+        break;
+      case "allitems":
+        show_allitems();
         break;
       default:
         show_default();
