@@ -65,7 +65,7 @@ function show_items($cat = null){
 		$user = get_user_info()['user_ID'];
 		$sql = "SELECT * FROM 10153316_item WHERE status = '1' AND seller_ID <> $user";
 		if($cat != null){
-			$sql = "SELECT * FROM 10153316_item WHERE status = '1' AND category_ID = '".mysqli_real_escape_string($connection, $cat)."'";
+			$sql = "SELECT * FROM 10153316_item WHERE status = '1' AND seller_ID <> $user AND category_ID = '".mysqli_real_escape_string($connection, $cat)."'";
 		}
 		$result = mysqli_query($connection, $sql);
 		return mysqli_fetch_all($result);
@@ -349,13 +349,11 @@ function show_login() {
 		if(!empty($_POST)) {
 	    $errors=array();
 	    if(!empty($_POST["username"])){
-	      echo $_POST["username"];
 	      $username = mysqli_real_escape_string($connection, htmlspecialchars($_POST['username']));
 	    } else {
 	      $errors[]="Username not entered!";
 	    }
 	    if(!empty($_POST["password"])){
-	      echo $_POST["password"];
 	      $passwd = mysqli_real_escape_string($connection, htmlspecialchars($_POST['password']));
 	    } else {
 	      $errors[]="Password not entered!";
@@ -370,7 +368,7 @@ function show_login() {
 	        $_SESSION['username']=$username;
 					header('Location: ?mode=index');
 	  		} else {
-	  			echo "Wrong username or password! <a href=\"?mode=login\">Tagasi</a>";
+	  			$errors[]="Wrong username or password! <a href=\"?mode=login\">BACK</a>";
 	  		}
 	    }
 	  }
@@ -397,69 +395,64 @@ function register(){
 			$notifications=array();
 
 			if(!empty($_POST["username"])){
-				echo $_POST["username"];
 				$username = mysqli_real_escape_string($connection, htmlspecialchars($_POST['username']));
 			} else {
 				$errors[]="Username not entered!";
 			}
 			if(!empty($_POST["password"])){
-				echo $_POST["password"];
 				$passwd = mysqli_real_escape_string($connection, htmlspecialchars($_POST['password']));
 			} else {
 				$errors[]="Password not entered!";
 			}
 			if(!empty($_POST["password_confirm"])){
-				echo $_POST["password_confirm"];
 				$passwd_conf = mysqli_real_escape_string($connection, htmlspecialchars($_POST['password_confirm']));
 			} else {
 				$errors[]="Password not entered!";
 			}
 
 			if(!empty($_POST["forename"])){
-				echo $_POST["forename"];
 				$forename = mysqli_real_escape_string($connection, htmlspecialchars($_POST['forename']));
 			} else {
 				$errors[]="Forename not entered!";
 			}
 
 			if(!empty($_POST["surename"])){
-				echo $_POST["surename"];
 				$surename = mysqli_real_escape_string($connection, htmlspecialchars($_POST['surename']));
 			} else {
 				$errors[]="Surename not entered!";
 			}
 
 			if(!empty($_POST["usrtel"])){
-				echo $_POST["usrtel"];
 				$usrtel = mysqli_real_escape_string($connection, htmlspecialchars($_POST['usrtel']));
 			} else {
 				$errors[]="Phone number not entered!";
 			}
 
 			if(!empty($_POST["email"])){
-				echo $_POST["email"];
 				$email = mysqli_real_escape_string($connection, htmlspecialchars($_POST['email']));
 			} else {
 				$errors[]="E-mail address not entered!";
 			}
 
-			if ($passwd != $passwd_conf){
-				$errors[]="Entered passwords do not match";
-			} else if ($passwd == $passwd_conf && empty($errors)){
+			if (!empty($_POST["password_confirm"]) && !empty($_POST["password"])){
+					if ($passwd != $passwd_conf){
+					$errors[]="Entered passwords do not match";
+				} else if ($passwd == $passwd_conf && empty($errors)){
 
-				// Kontroll, kas  kasutajanimi juba andmebaasis olemas
-				$query = "SELECT username FROM 10153316_user WHERE username = '".$username."'";
-	      $result = mysqli_query($connection, $query);
-	      if (mysqli_num_rows($result) >= 1) {
-					$errors[]="Username already in use";
+					// Kontroll, kas  kasutajanimi juba andmebaasis olemas
+					$query = "SELECT username FROM 10153316_user WHERE username = '".$username."'";
+		      $result = mysqli_query($connection, $query);
+		      if (mysqli_num_rows($result) >= 1) {
+						$errors[]="Username already in use";
+					} else {
+						// lisab kasutja andmebaasi
+						$query = "INSERT INTO `10153316_user`(`username`, `password`, `phone`, `email`, `forename`, `surename`) VALUES ('".$username."', SHA1('".$passwd."'), '".$usrtel."', '".$email."', '".$forename."', '".$surename."')";
+						$result = mysqli_query($connection, $query);
+						$notifications[]="Register successful";
+					}
 				} else {
-					// lisab kasutja andmebaasi
-					$query = "INSERT INTO `10153316_user`(`username`, `password`, `phone`, `email`, `forename`, `surename`, `reg_date`) VALUES ('".$username."', SHA1('".$passwd."'), '".$usrtel."', '".$email."', '".$forename."', '".$surename."',now())";
-					$result = mysqli_query($connection, $query) or die ("Päring ebaõnnestus!");
-					$notifications[]="Register successful";
+						$errors[]="Error!";
 				}
-			} else {
-					$errors[]="Error!";
 			}
 		}
 	include('view/head.html');

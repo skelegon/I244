@@ -12,29 +12,29 @@
             echo '<a href="controller.php?mode=buy&category='.$row['category_ID'].'" class="list-group-item">'.$row['category'].'</a>';
           }
           ?>
-      </div>
+        </div>
     </div>
 
-    <?php
-    $cat = null;
-    if(isset($_GET['category'])){
-      $cat = $_GET['category'];
-    }
-      $items = show_items($cat);
-      foreach($items as $key => $value){
-        echo '<div class="row">
-          <div class="col-sm-4 col-lg-4 col-md-4">
-            <div class="thumbnail">
-              <img src="'.$value[5].'" alt="">
-              <div class="caption">
-                <h4><a href="?mode=item&id='.$value[0].'">'.$value[1].'</a>
-                </h4>
-                <p>'.$value[9].'</p>
-              </div>
-            </div>
-          </div>
-        </div>';
+
+    <div class="row">
+      <?php
+      $cat = null;
+      if(isset($_GET['category'])){
+        $cat = $_GET['category'];
       }
-    ?>
+        $items = show_items($cat);
+        foreach($items as $key => $value){
+          echo '
+            <div class="col-sm-4 col-lg-4 col-md-4">
+              <div class="thumbnail">
+                <img src="'.$value[5].'" alt="">
+                <div class="caption">
+                  <h4><a href="?mode=item&id='.$value[0].'">'.$value[1].'</a></h4>
+                  <p>'.$value[9].'</p>
+                </div>
+              </div>
+            </div>';  
+        }?>
+    </div>
   </div>
 </div>

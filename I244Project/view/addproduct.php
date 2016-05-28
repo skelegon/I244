@@ -7,7 +7,7 @@ if(isset($_SESSION['username'])){
 	$tel = $info['phone'];
 	$user_ID = $info['user_ID'];
 } else {
-	show_login();
+	header("Location: ?mode=login");
 }
 
 $errors=array();
@@ -57,20 +57,7 @@ if (!empty($_POST)){
 		$p = mysqli_real_escape_string($connection, upload("pic", "pictures/"));
 		$description = mysqli_real_escape_string($connection, $_POST["description"]);
 		$category = mysqli_real_escape_string($connection, $_POST["category"]);
-		//var_dump($p);
 
-/*
-		echo "<pre>";
-		var_dump($name);
-		var_dump($condition);
-		var_dump($qty);
-		var_dump($unitprice);
-		var_dump($unit);
-		var_dump($usrtel);
-		var_dump($email);
-		var_dump($p);
-		echo "</pre>";
-*/
 		$sql = "INSERT INTO 10153316_item (name, cond, quantity, unit, thumbnail, phone, email, description, seller_ID, category_ID) VALUES ('$name', '$condition', '$qty', '$unit', 'pictures/".$p."', '$usrtel', '$email', '$description', '$user_ID', '$category')";
 		$result = mysqli_query($connection, $sql);
 
@@ -92,106 +79,112 @@ if (!empty($_POST)){
 	$category = isset($_POST['category']) ? $_POST['category'] : "";
 }
 }
+
+
+if (!empty($errors)) {
+	echo'<div>';
+  foreach($errors as $e):
+    echo'<p style="border:1px solid #000; padding: 5px; background-color:red">'.$e.'</p>';
+  endforeach;
+echo '</div>';
+}
+
+if (!empty($notifications)) {
+	echo'<div>';
+  foreach($notifications as $n):
+    echo'<p style="border:1px solid #000; padding: 5px; background-color:green">'.$n.'</p>';
+  endforeach;
+echo '</div>';
+}
 ?>
 
-<h1>Add an item</h1>
-  <div class="Product_Content">
-      <form class="form-horizontal" action='?mode=addproduct' method="POST" enctype="multipart/form-data">
-          <fieldset>
-              <h4>Product information:</h4>
-                <div class="col-lg-12 form-group margin50">
-                  <label class="col-lg-2"  for="Name">Name</label>
-                  	<div class="col-lg-4">
-                    	<input type="text" name="name" placeholder="Item name" value="<?=$name?>">
-                    </div>
-                </div>
 
-								<div class="col-lg-12 form-group margin50">
-                  <label class="col-lg-2"  for="Name">Category</label>
-                  <div class="col-lg-4">
-                    <select name="category">
-											<?php
-												global $connection;
-												$fetch_category = "SELECT category_ID, category FROM 10153316_category";
-												$result = mysqli_query($connection, $fetch_category);
+<form class="form-signin" action='controller.php?mode=addproduct' method="POST" enctype="multipart/form-data">
+  <h2 class="form-signin-heading">Add an item</h2>
+	<h4 class ="form-signin-heading">Product information:</h4>
 
-												while($row = mysqli_fetch_assoc($result)) {
-													 echo "<option value=".$row["category_ID"].">".$row["category"]."</option>";
-												}
-												?>
-				            </select>
-                  </div>
-                </div>
+  <fieldset>
+    <div class="control-group">
+      <label class="control-label"  for="name">Name</label>
+      <div class="controls">
+        <input type="text" name="name" placeholder="Item name" value="<?=$name?>" class="form-control">
+      </div>
+    </div>
 
-                <div class="col-lg-12 form-group margin50">
-                      <label class="col-lg-2"  for="Name">Condition</label>
-                      <div class="col-lg-4">
-                          <select name="condition">
-                              <option value="new" <?php if(isset($condition) && $condition=="new") echo 'selected="selected"'; ?>>New</option>
-                              <option value="used" <?php if(isset($condition) && $condition=="used") echo 'selected="selected"'; ?>>Used</option>
-                          </select>
-                      </div>
-                </div>
+		<div class="control-group">
+			<label class="control-label"  for="category">Category</label>
+			<div class="controls">
+				<select name="category" class="form-control">
+					<?php
+						global $connection;
+						$fetch_category = "SELECT category_ID, category FROM 10153316_category";
+						$result = mysqli_query($connection, $fetch_category);
+						while($row = mysqli_fetch_assoc($result)) {
+							 echo "<option value=".$row["category_ID"].">".$row["category"]."</option>";
+						}
+						?>
+				</select>
+			</div>
+		</div>
 
-                <div class="col-lg-12 form-group margin50">
-                      <label class="col-lg-2"  for="Name">Quantity</label>
-                      <div class="col-lg-4">
-                          <input type="quantity" name="qty" min="0" placeholder="1" value="<?=$qty?>">
-                      </div>
-                </div>
+		<div class="control-group">
+			<label class="control-label"  for="condition">Condition</label>
+			<div class="controls">
+				<select name="condition" class="form-control">
+						<option value="new" <?php if(isset($condition) && $condition=="new") echo 'selected="selected"'; ?>>New</option>
+						<option value="used" <?php if(isset($condition) && $condition=="used") echo 'selected="selected"'; ?>>Used</option>
+				</select>
+			</div>
+		</div>
 
-                <div class="col-lg-12 form-group margin50">
-                      <label class="col-lg-2"  for="Name">Unit</label>
-                      <div class="col-lg-4">
-                          <input type="text" name="unit" placeholder="pcs" value="<?=$unit?>">
-                      </div>
-                </div>
+		<div class="control-group">
+      <label class="control-label"  for="quantity">Quantity</label>
+      <div class="controls">
+        <input type="text" name="quantity" placeholder="Quantity" value="<?=$qty?>" class="form-control">
+      </div>
+    </div>
 
-                <div class="col-lg-12 form-group margin50">
-                      <label class="col-lg-2"  for="Name">Description</label>
-                      <div class="col-lg-4">
-                          <input type="text" name="description" placeholder="description" value="<?=$description?>">
-                      </div>
-                </div>
+		<div class="control-group">
+      <label class="control-label"  for="unit">Unit</label>
+      <div class="controls">
+        <input type="text" name="unit" placeholder="Unit" value="<?=$unit?>" class="form-control">
+      </div>
+    </div>
 
-                <div class="col-lg-12 form-group margin50">
-                      <label class="col-lg-2"  for="Name">Display picture</label>
-                      <div class="col-lg-4">
-                          <input type="file" name="pic" accept="image/*">
-                      </div>
-                </div>
+		<div class="control-group">
+			<label class="control-label"  for="description">Description</label>
+			<div class="controls">
+				<input type="text" name="description" placeholder="Description" value="<?=$description?>" class="form-control">
+			</div>
+		</div>
 
-              <h4>Contact information</h4>
-              <div class="col-lg-12 form-group margin50">
-                    <label class="col-lg-2"  for="Name">Phone number</label>
-                    <div class="col-lg-4">
-                        <input type="tel" name="usrtel" value="<?=$tel?>">
-                    </div>
-              </div>
+		<div class="control-group">
+			<label class="control-label"  for="pic">Display picture</label>
+			<div class="controls">
+				  <input type="file" name="pic" accept="image/*" class="form-control">
+			</div>
+		</div>
 
-              <div class="col-lg-12 form-group margin50">
-                    <label class="col-lg-2"  for="Name">E-mail address</label>
-                    <div class="col-lg-4">
-                        <input type="email" name="email" value="<?=$email?>">
-                    </div>
-              </div>
+		<h4 class ="form-signin-heading">Contact information:</h4>
 
-							<div class ="controls">
-              	<input type="submit" value="Next" class="btn btn-lg btn-primary btn-block"/></br>
-							</div>
-        </fieldset>
-      </form>
+		<div class="control-group">
+			<label class="control-label"  for="usrtel">Phone number</label>
+			<div class="controls">
+				  <input type="tel" name="usrtel" value="<?=$tel?>" class="form-control">
+			</div>
+		</div>
 
-	<?php if (isset($errors)):?>
-			<?php foreach($errors as $error):?>
-				<div style="color:red;"><?php echo htmlspecialchars($error); ?></div>
-			<?php endforeach;?>
-	<?php endif;?>
+		<div class="control-group">
+			<label class="control-label"  for="email">E-mail address</label>
+			<div class="controls">
+					<input type="email" name="email" value="<?=$email?>" class="form-control">
+			</div>
+		</div><br/>
 
-	<?php if (isset($notifications)):?>
-			<?php foreach($notifications as $notification):?>
-				<div style="color:green;"><?php echo htmlspecialchars($notification); ?></div>
-			<?php endforeach;?>
-	<?php endif;?>
+		<div class ="controls">
+    	<input type="submit" value="Next" class="btn btn-lg btn-primary btn-block"/></br>
+		</div>
 
+  </fieldset>
+</form>
 </div>

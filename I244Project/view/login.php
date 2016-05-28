@@ -1,3 +1,11 @@
+<?php if (!empty($errors)):?>
+  <div>
+  <?php foreach($errors as $e):?>
+    <p style="border:1px solid #000; padding: 5px; background-color:red"><?php echo $e; ?></p>
+  <?php endforeach;?>
+</div>
+<?php endif;?>
+
 <form class="form-signin" action="controller.php?mode=login" method="POST">
   <h2 class="form-signin-heading">Please sign in</h2>
   <label for="inputUsername" class="sr-only">Username</label>
@@ -9,11 +17,3 @@
   <br>
 </form>
 <p>Not yet an user? <a href="?mode=register">Sign up!</a></p>
-
-
-<!-- Print out errors -->
-<?php if (!empty($errors)):?>
-  <?php foreach($errors as $e):?>
-    <p style="color:red"><?php echo $e; ?></style>
-  <?php endforeach;?>
-<?php endif;?>
