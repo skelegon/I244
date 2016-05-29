@@ -20,6 +20,14 @@ function get_user_info(){
 	return mysqli_fetch_assoc($res);
 	}
 
+	function get_items_owner_info($sellerID){
+		global $connection;
+	  $username = $_SESSION['username'];
+		$sql = "SELECT username FROM 10153316_user WHERE user_ID = '".$sellerID."'";
+		$res = mysqli_query($connection, $sql);
+		return mysqli_fetch_assoc($res);
+		}
+
 function start_session(){
 	session_start();
 	}
@@ -236,11 +244,11 @@ function product_status($id){
 		if ($status == 1){
 			$sql = "UPDATE 10153316_item SET status='2' WHERE item_ID='".mysqli_real_escape_string($connection, $id)."'";
 			$result = mysqli_query($connection, $sql);
-			return "Successfully deleted: ..";
+			return "Successfully suspended: ..";
 		} else if($status == 2) {
 			$sql = "UPDATE 10153316_item SET status='1' WHERE item_ID='".mysqli_real_escape_string($connection, $id)."'";
 			$result = mysqli_query($connection, $sql);
-			return "Successfully deleted: ..";
+			return "Successfully un-suspended: ..";
 		}
 	return "No changes";
 }
@@ -361,9 +369,11 @@ function show_login() {
 	    if (empty($errors)) {
 	      $query = "SELECT user_ID FROM 10153316_user WHERE username = '".$username."' AND password = SHA1('".$passwd."')";
 	      $result = mysqli_query($connection, $query);
-				//var_dump(mysqli_error($connection));
+
 	      if (mysqli_num_rows($result) >= 1) {
-					$query ="UPDATE 10153316_user SET visits=visits+1";
+					$userID = mysqli_fetch_assoc($result)['user_ID'];
+
+					$query ="UPDATE 10153316_user SET visits=visits+1 WHERE user_ID = $userID";
 					$result = mysqli_query($connection, $query);
 	        $_SESSION['username']=$username;
 					header('Location: ?mode=index');

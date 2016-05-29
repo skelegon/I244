@@ -9,19 +9,27 @@ if (!empty($item['item_ID'])) {
   $res = mysqli_query($connection, $change_status);
 }
 
-echo '<div class="row">
-  <div class="col-sm-4 col-lg-4 col-md-4">
-    <div class="thumbnail">
-      <img src="'.$item['thumbnail'].'" alt="">
-      <div class="caption">
-        <h4>'.$item['name'].'</h4>
-        <p>'.$item['description'].'</p>
-        <p>Condition: '.$item['cond'].'</p>
-        <p>Quantity: '.$item['quantity'].' '.$item['unit'].'</p>
-      </div>
-    </div>
-  </div>
-</div>';
+echo '<div class="container">
+        <div class="row">
+          <section class="content">
+            <div class="col-md-8 col-md-offset-2">
+              <div class="panel panel-default">
+                <div class="panel-body">
+                  <div class="table-container">
+                    <img src="'.$item['thumbnail'].'" alt="">
+                    <div class="caption">
+                      <h4>'.$item['name'].'</h4>
+                      <p>'.$item['description'].'</p>
+                      <p>Condition: '.$item['cond'].'</p>
+                      <p>Quantity: '.$item['quantity'].' '.$item['unit'].'</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>';
 
 	if(isset($_SESSION['username'])){
 		$info = get_user_info();
