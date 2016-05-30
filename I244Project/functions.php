@@ -182,13 +182,20 @@ function show_declined_requests(){
 
 function cancel_my_request($id){
 	global $connection;
-	$sql = "UPDATE 10153316_request SET status='3' WHERE request_ID='".mysqli_real_escape_string($connection, $id)."'";
-	$result = mysqli_query($connection, $sql);
 
-	$item_status = "UPDATE 10153316_item SET status='1' WHERE item_ID = (SELECT sellitem_ID FROM 10153316_request WHERE request_ID = '$id')";
+		//$sql = "UPDATE 10153316_request SET status='3' WHERE request_ID='".mysqli_real_escape_string($connection, $id)."' AND sellitem_ID = (SELECT )";
 
-	return "Successfully deleted: ..";
-}
+		$sql = "UPDATE 10153316_request req, 10153316_item itm SET req.status='3' WHERE req.sellitem_ID = itm.item_ID AND req.request_ID = '".mysqli_real_escape_string($connection, $id)."' AND itm.seller_ID = ".$_SESSION['userID']."";
+
+		$result = mysqli_query($connection, $sql);
+		if(mysqli_affected_rows($connection) > 0){
+			//TODO: $item_status = "UPDATE 10153316_item SET status='1' WHERE item_ID = (SELECT sellitem_ID FROM 10153316_request WHERE request_ID = '$id') AND seller_ID = '".$_SESSION['userID']."'";
+			return "Successfully deleted";
+		} else {
+			return "Successfully not deleted";
+		}
+	}
+
 
 function cancel_user_request($id){
 	global $connection;
@@ -204,7 +211,6 @@ function suspend_user_items($id) {
 	$get_status = "SELECT status FROM 10153316_item WHERE seller_ID='".mysqli_real_escape_string($connection, $id)."'";
 	$s = mysqli_query($connection, $get_status);
 	$status = mysqli_fetch_assoc($s)['status'];
-
 	$msg = "No item statuses were changed";
 	$s = 1;
 	if($status == 0) {
@@ -214,10 +220,8 @@ function suspend_user_items($id) {
 		$s = 0;
 	 	$msg = "Successfully suspended user items: ..";
 	}
-
 	$sql = "UPDATE 10153316_item SET status='".$s."' WHERE seller_ID = '$id'";
   mysqli_query($connection, $sql);
-
 	return $msg;
 }
 
@@ -376,6 +380,7 @@ function show_login() {
 					$query ="UPDATE 10153316_user SET visits=visits+1 WHERE user_ID = $userID";
 					$result = mysqli_query($connection, $query);
 	        $_SESSION['username']=$username;
+					$_SESSION['userID']=$userID;
 					header('Location: ?mode=index');
 	  		} else {
 	  			$errors[]="Wrong username or password! <a href=\"?mode=login\">BACK</a>";
@@ -491,19 +496,24 @@ function get_item_info($id = null){
 }
 
 function suspend_user($id){
-	global $connection;
-	$get_status = "SELECT status FROM 10153316_user WHERE user_ID='".mysqli_real_escape_string($connection, $id)."'";
-	$status = mysqli_fetch_assoc(mysqli_query($connection, $get_status))['status'];
-	if ($status == 1) {
-		$sql = "UPDATE 10153316_user SET status='0' WHERE user_ID='".mysqli_real_escape_string($connection, $id)."'";
+	if (!is_admin()){
+		header("Location: ?mode=login");
+	} else {
+		global $connection;
+		$get_status = "SELECT status FROM 10153316_user WHERE user_ID='".mysqli_real_escape_string($connection, $id)."'";
+		$status = mysqli_fetch_assoc(mysqli_query($connection, $get_status))['status'];
+		if ($status == 1) {
+			$sql = "UPDATE 10153316_user SET status='0' WHERE user_ID='".mysqli_real_escape_string($connection, $id)."'";
+			$result = mysqli_query($connection, $sql);
+			cancel_user_request($id);
+			suspend_user_items($id);
+			return "Successfully suspended: ..";
+		}
+		$sql = "UPDATE 10153316_user SET status='1' WHERE user_ID='".mysqli_real_escape_string($connection, $id)."'";
 		$result = mysqli_query($connection, $sql);
-		cancel_user_request($id);
 		suspend_user_items($id);
-		return "Successfully suspended: ..";
+		return "Successfully un-suspended: ..";
 	}
-	$sql = "UPDATE 10153316_user SET status='1' WHERE user_ID='".mysqli_real_escape_string($connection, $id)."'";
-	$result = mysqli_query($connection, $sql);
-	suspend_user_items($id);
-	return "Successfully un-suspended: ..";
 }
+
 ?>

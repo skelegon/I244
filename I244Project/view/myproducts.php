@@ -17,24 +17,29 @@
 								<tbody>
                          <?php
                             $items = show_my_items();
-                            foreach($items as $key => $value){
-                              echo '<tr>
-                                      <td>
-                                        <div class="media">
-                                          <img class="pull-left" src="'.$value[5].'" alt="">
-                                          <div class="media-body">
-                                            <span class="media-meta pull-right">Views: '.$value[11].'</span>
-                                            <h4 class="title">'.$value[1].'</h4>
-                                            <p class="description">Description: '.$value[8].'</p>
+
+                            if (!empty($items)) {
+                              foreach($items as $key => $value){
+                                echo '<tr>
+                                        <td>
+                                          <div class="media">
+                                            <img class="pull-left" src="'.$value[5].'" alt="pic" width="100">
+                                            <div class="media-body">
+                                              <h4 class="title">'.$value[1].'</h4>
+                                              <p class="description">Description: '.$value[8].'</p>
+                                            </div>
                                           </div>
-                                        </div>
-                                      </td>
-                                      <td>
-                                        <div class ="controls">
-                                          <a href="controller.php?mode=myproducts&del='.$value[0].'" class="btn btn-lg btn-primary btn-block">Delete</a></br>
-                                        </div>
-                                      </td>
-                                    </tr>';
+                                        </td>
+                                        <td>
+                                          <div class ="controls">
+                                            <a href="controller.php?mode=myproducts&del='.$value[0].'" class="btn btn-lg btn-primary btn-block">Delete</a></br>
+                                          </div>
+                                          <span class="media-meta pull-right">Views: '.$value[11].'</span>
+                                        </td>
+                                      </tr>';
+                                    }
+                            } else {
+                                echo '<p>You currently have no active items. <a href=?mode=addproduct>Click here to add an item</a></p>';
                             }
                           ?>
 								</tbody>

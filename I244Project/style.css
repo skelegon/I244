@@ -136,3 +136,13 @@ input[type=radio], input[type=checkbox]
     text-decoration: none;
     color: black;
 }
+
+.center-div {
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+.about_pg {
+  text-align: justify;
+}

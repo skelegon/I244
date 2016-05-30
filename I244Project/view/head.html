@@ -26,6 +26,9 @@
                 <div class="container-fluid">
                   <ul class="nav navbar-nav">
                     <li id="home" class="active"><a href="?mode=index">Home</a></li>
+                    <?php
+                    if (isset($_SESSION['username'])) {
+                      ?>
                     <li id="buy"><a href="?mode=buy">Trade</a></li>
                     <li class="dropdown">
                       <a class="dropdown-toggle" data-toggle="dropdown" href="#">My stuff
@@ -39,6 +42,8 @@
                         <li><a href="?mode=notifications">Notifications</a></li>
                       </ul>
                     </li>
+                    <?php
+                  }?>
                     <li id="about"><a href="?mode=about">About</a></li>
                     <?php
                     if (isset($_SESSION['username'])) {
@@ -48,7 +53,7 @@
                           <li id="allitems"><a href="?mode=allitems">Items</a></li>
                       <?php }
                     }?>
-                      
+
 
                   </ul>
                   <ul class="nav navbar-nav navbar-right">

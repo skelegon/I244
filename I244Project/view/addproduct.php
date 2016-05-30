@@ -23,7 +23,7 @@ if (!empty($_POST)){
 	if (empty($_POST["condition"])) {
 		$errors[]="Please fill condition field!";
 	}
-	if (empty($_POST["qty"])) {
+	if (empty($_POST["quantity"])) {
 		$errors[]="Please fill quantity field!";
 	}
 	if (empty($_POST["unit"])) {
@@ -50,7 +50,7 @@ if (!empty($_POST)){
 		//var_dump($_POST);
 		$name=mysqli_real_escape_string($connection, $_POST["name"]);
 		$condition=mysqli_real_escape_string($connection, $_POST["condition"]);
-		$qty=mysqli_real_escape_string($connection, $_POST["qty"]);
+		$qty=mysqli_real_escape_string($connection, $_POST["quantity"]);
 		$unit=mysqli_real_escape_string($connection, $_POST["unit"]);
 		$usrtel=mysqli_real_escape_string($connection, $_POST["usrtel"]);
 		$email=mysqli_real_escape_string($connection, $_POST["email"]);
@@ -73,7 +73,7 @@ if (!empty($_POST)){
 } else {
 	$name = isset($_POST['name']) ? $_POST['name'] : "";
 	$condition = isset($_POST['condition']) ? $_POST['condition'] : "";
-	$qty = isset($_POST['qty']) ? $_POST['qty'] : "";
+	$qty = isset($_POST['quantity']) ? $_POST['quantity'] : "";
 	$unit = isset($_POST['unit']) ? $_POST['unit'] : "";
 	$description = isset($_POST['description']) ? $_POST['description'] : "";
 	$category = isset($_POST['category']) ? $_POST['category'] : "";
