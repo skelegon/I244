@@ -34,15 +34,15 @@ if(isset($_GET['dr'])){
                     if(!empty($requests)){
                       foreach($requests as $key => $value){
                         global $connection;
-                        $get_seller = "SELECT username FROM 10153316_user WHERE user_ID in (SELECT seller_ID FROM 10153316_item where item_ID = '$value[2]')";
+                        $get_seller = ("SELECT username FROM 10153316_user WHERE user_ID in (SELECT seller_ID FROM 10153316_item where item_ID = '$value[2]')");
                         $seller = mysqli_fetch_assoc(mysqli_query($connection, $get_seller));
                         $seller_name = $seller['username'];
 
-                        $get_buyitem = "SELECT name FROM 10153316_item WHERE item_ID = $value[2]";
+                        $get_buyitem = ("SELECT name FROM 10153316_item WHERE item_ID = $value[2]");
                         $buyitem = mysqli_fetch_assoc(mysqli_query($connection, $get_buyitem));
                         $buyitem_name = $buyitem['name'];
 
-                        $get_sellitem = "SELECT name FROM 10153316_item WHERE item_ID = $value[1]";
+                        $get_sellitem = ("SELECT name FROM 10153316_item WHERE item_ID = $value[1]");
                         $sellitem = mysqli_fetch_assoc(mysqli_query($connection, $get_sellitem));
                         $sellitem_name = $sellitem['name'];
 
@@ -77,20 +77,20 @@ if(isset($_GET['dr'])){
                       if(!empty($requests)){
                         foreach($requests as $key => $value){
                           global $connection;
-                          $get_seller = "SELECT username FROM 10153316_user WHERE user_ID in (SELECT seller_ID FROM 10153316_item where item_ID = '$value[2]')";
+                          $get_seller = ("SELECT username FROM 10153316_user WHERE user_ID in (SELECT seller_ID FROM 10153316_item where item_ID = '$value[1]')");
                           $seller = mysqli_fetch_assoc(mysqli_query($connection, $get_seller));
                           $seller_name = $seller['username'];
 
-                          $get_buyitem = "SELECT name FROM 10153316_item WHERE item_ID = $value[2]";
+                          $get_buyitem = ("SELECT name FROM 10153316_item WHERE item_ID = $value[2]");
                           $buyitem = mysqli_fetch_assoc(mysqli_query($connection, $get_buyitem));
                           $buyitem_name = $buyitem['name'];
 
-                          $get_sellitem = "SELECT name FROM 10153316_item WHERE item_ID = $value[1]";
+                          $get_sellitem = ("SELECT name FROM 10153316_item WHERE item_ID = $value[1]");
                           $sellitem = mysqli_fetch_assoc(mysqli_query($connection, $get_sellitem));
                           $sellitem_name = $sellitem['name'];
 
                           echo '<div class="row">
-                                    <p>User <b>'.$seller_name.'</b> has requested to trade their item <b>'.$buyitem_name.'</b> for your item <b>'.$sellitem_name.'</b><a class=" control-group controls btn btn-xs btn-primary btn-block" href="controller.php?mode=traderequests&ar='.$value[0].'">Accept</a><a class="control-group controls btn btn-xs btn-primary btn-block" href="controller.php?mode=traderequests&dr='.$value[0].'">Decline</a></br></p>';
+                                    <p>User <b>'.$seller_name.'</b> has requested to trade their item <b>'.$sellitem_name.'</b> for your item <b>'.$buyitem_name.'</b><a class=" control-group controls btn btn-xs btn-primary btn-block" href="controller.php?mode=traderequests&ar='.$value[0].'">Accept</a><a class="control-group controls btn btn-xs btn-primary btn-block" href="controller.php?mode=traderequests&dr='.$value[0].'">Decline</a></br></p>';
                         }
                       } else {
                         echo '<p>You have currently no active declined requests</p>';

@@ -16,7 +16,7 @@ if(!$file){
 }
 ?>
 
-<footer class="container-fluid text-center">
+<footer class="container-fluid text-center footer">
   <div>
     <span id="time"></span>
     <a href="http://validator.w3.org/check?uri=referer">

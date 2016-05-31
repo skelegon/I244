@@ -24,17 +24,17 @@ if(isset($_GET['rmr'])){
                     if(!empty($requests)){
                       foreach($requests as $key => $value){
                         global $connection;
-                        $get_seller = "SELECT username, email, phone FROM 10153316_user WHERE user_ID in (SELECT seller_ID FROM 10153316_item where item_ID = '$value[2]')";
+                        $get_seller = ("SELECT username, email, phone FROM 10153316_user WHERE user_ID in (SELECT seller_ID FROM 10153316_item where item_ID = '$value[2]')");
                     		$seller = mysqli_fetch_assoc(mysqli_query($connection, $get_seller));
                         $seller_name = $seller['username'];
                         $seller_phone = $seller['phone'];
                         $seller_email = $seller['email'];
 
-                        $get_buyitem = "SELECT name FROM 10153316_item WHERE item_ID = $value[2]";
+                        $get_buyitem = ("SELECT name FROM 10153316_item WHERE item_ID = $value[2]");
                         $buyitem = mysqli_fetch_assoc(mysqli_query($connection, $get_buyitem));
                         $buyitem_name = $buyitem['name'];
 
-                        $get_sellitem = "SELECT name FROM 10153316_item WHERE item_ID = $value[1]";
+                        $get_sellitem = ("SELECT name FROM 10153316_item WHERE item_ID = $value[1]");
                         $sellitem = mysqli_fetch_assoc(mysqli_query($connection, $get_sellitem));
                         $sellitem_name = $sellitem['name'];
 
@@ -75,15 +75,15 @@ if(isset($_GET['rmr'])){
                       if(!empty($requests)){
                         foreach($requests as $key => $value){
                           global $connection;
-                          $get_seller = "SELECT username FROM 10153316_user WHERE user_ID in (SELECT seller_ID FROM 10153316_item where item_ID = '$value[2]')";
+                          $get_seller = ("SELECT username FROM 10153316_user WHERE user_ID in (SELECT seller_ID FROM 10153316_item where item_ID = '$value[2]')");
                           $seller = mysqli_fetch_assoc(mysqli_query($connection, $get_seller));
                           $seller_name = $seller['username'];
 
-                          $get_buyitem = "SELECT name FROM 10153316_item WHERE item_ID = $value[2]";
+                          $get_buyitem = ("SELECT name FROM 10153316_item WHERE item_ID = $value[2]");
                           $buyitem = mysqli_fetch_assoc(mysqli_query($connection, $get_buyitem));
                           $buyitem_name = $buyitem['name'];
 
-                          $get_sellitem = "SELECT name FROM 10153316_item WHERE item_ID = $value[1]";
+                          $get_sellitem = ("SELECT name FROM 10153316_item WHERE item_ID = $value[1]");
                           $sellitem = mysqli_fetch_assoc(mysqli_query($connection, $get_sellitem));
                           $sellitem_name = $sellitem['name'];
 

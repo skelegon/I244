@@ -48,17 +48,17 @@ if (!empty($_POST)){
 	if (empty($errors)){
 		global $connection;
 		//var_dump($_POST);
-		$name=mysqli_real_escape_string($connection, $_POST["name"]);
-		$condition=mysqli_real_escape_string($connection, $_POST["condition"]);
-		$qty=mysqli_real_escape_string($connection, $_POST["quantity"]);
-		$unit=mysqli_real_escape_string($connection, $_POST["unit"]);
-		$usrtel=mysqli_real_escape_string($connection, $_POST["usrtel"]);
-		$email=mysqli_real_escape_string($connection, $_POST["email"]);
-		$p = mysqli_real_escape_string($connection, upload("pic", "pictures/"));
-		$description = mysqli_real_escape_string($connection, $_POST["description"]);
-		$category = mysqli_real_escape_string($connection, $_POST["category"]);
+		$name=sanitize_for_db($connection, $_POST["name"]);
+		$condition=sanitize_for_db($connection, $_POST["condition"]);
+		$qty=sanitize_for_db($connection, $_POST["quantity"]);
+		$unit=sanitize_for_db($connection, $_POST["unit"]);
+		$usrtel=sanitize_for_db($connection, $_POST["usrtel"]);
+		$email=sanitize_for_db($connection, $_POST["email"]);
+		$p = sanitize_for_db($connection, upload("pic", "pictures/"));
+		$description = sanitize_for_db($connection, $_POST["description"]);
+		$category = sanitize_for_db($connection, $_POST["category"]);
 
-		$sql = "INSERT INTO 10153316_item (name, cond, quantity, unit, thumbnail, phone, email, description, seller_ID, category_ID) VALUES ('$name', '$condition', '$qty', '$unit', 'pictures/".$p."', '$usrtel', '$email', '$description', '$user_ID', '$category')";
+		$sql = ("INSERT INTO 10153316_item (name, cond, quantity, unit, thumbnail, phone, email, description, seller_ID, category_ID) VALUES ('$name', '$condition', '$qty', '$unit', 'pictures/".$p."', '$usrtel', '$email', '$description', '$user_ID', '$category')");
 		$result = mysqli_query($connection, $sql);
 
 		if (!$result) {
@@ -146,10 +146,16 @@ echo '</div>';
 
 		<div class="control-group">
       <label class="control-label"  for="unit">Unit</label>
-      <div class="controls">
-        <input type="text" name="unit" placeholder="Unit" value="<?=$unit?>" class="form-control">
-      </div>
-    </div>
+			<div class="controls">
+				<select name="unit" class="form-control">
+						<option value="pcs" <?php if(isset($unit) && $unit=="pcs") echo 'selected="selected"'; ?>>pc(s)</option>
+						<option value="set" <?php if(isset($unit) && $unit=="set") echo 'selected="selected"'; ?>>set</option>
+						<option value="kg" <?php if(isset($unit) && $unit=="kg") echo 'selected="selected"'; ?>>kg</option>
+						<option value="m" <?php if(isset($unit) && $unit=="m") echo 'selected="selected"'; ?>>m</option>
+						<option value="kg" <?php if(isset($unit) && $unit=="set") echo 'selected="selected"'; ?>>kg</option>
+				</select>
+			</div>
+  	</div>
 
 		<div class="control-group">
 			<label class="control-label"  for="description">Description</label>

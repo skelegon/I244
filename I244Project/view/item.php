@@ -4,8 +4,8 @@ $item = get_item_info();
 
 if (!empty($item['item_ID'])) {
   global $connection;
-  $buyitem=mysqli_real_escape_string($connection, $item['item_ID']);
-  $change_status = "UPDATE 10153316_item SET views = views+1 WHERE item_ID = $buyitem";
+  $buyitem = mysqli_real_escape_string($connection, $item['item_ID']);
+  $change_status = ("UPDATE 10153316_item SET views = views+1 WHERE item_ID = $buyitem");
   $res = mysqli_query($connection, $change_status);
 }
 
@@ -16,7 +16,7 @@ echo '<div class="container">
               <div class="panel panel-default">
                 <div class="panel-body">
                   <div class="table-container">
-                    <img src="'.$item['thumbnail'].'" alt="">
+                      <img class="img-responsive" src="'.$item['thumbnail'].'" alt="'.$item['name'].'">
                     <div class="caption">
                       <h4>'.$item['name'].'</h4>
                       <p>'.$item['description'].'</p>
@@ -50,11 +50,9 @@ echo '<div class="container">
 			$sellitem=mysqli_real_escape_string($connection, $_POST["trade"]);
       $buyitem=mysqli_real_escape_string($connection, $item['item_ID']);
 
-      $change_status = "UPDATE 10153316_item SET status = '2' WHERE item_ID = $sellitem";
+      $change_status = ("UPDATE 10153316_item SET status = '2' WHERE item_ID = '$sellitem'");
       $res = mysqli_query($connection, $change_status);
-
-			$sql="INSERT INTO 10153316_request(sellitem_ID, buyitem_ID, comment, status) VALUES ('$sellitem', '$buyitem', '$comment', '2')";
-
+			$sql = ("INSERT INTO 10153316_request(sellitem_ID, buyitem_ID, comment, status) VALUES ('$sellitem', '$buyitem', '$comment', '2')");
 			$result = mysqli_query($connection, $sql);
 			if (!$result) {
 				$errors[] = "Request failed";

@@ -146,3 +146,30 @@ input[type=radio], input[type=checkbox]
 .about_pg {
   text-align: justify;
 }
+
+.message {
+  border:1px solid #000;
+  padding: 5px;
+  background-color:orange;
+}
+
+.navigation {
+    background-color: #2F4474;
+}
+
+.footer {
+    background-color: #2F6674;
+}
+
+.thumbnail {
+    min-height: 200px;
+    max-height: 200px;
+}
+
+.pict {
+    max-height: 150px;
+}
+
+.body-format {
+    padding: 10px;
+}

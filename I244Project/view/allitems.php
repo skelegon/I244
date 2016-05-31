@@ -19,10 +19,12 @@
                       $sellerID = $value[10];
                       $username = get_items_owner_info($sellerID)['username'];
                       echo '<tr><td>Item: <b>'.$value[1].'</b></td><td>by user: <b>'.$username.'</b></td>';
-                      if($value[14] == 2){
+                      if($value[14] == 0){
                         echo '<td><a href="controller.php?mode=allitems&del='.$value[0].'" class = "btn-unsuspend">Un-suspend</a>';
                       } else if ($value[14] == 1){
                         echo '<td><a href="controller.php?mode=allitems&del='.$value[0].'" class = "btn-suspend">Suspend</a>';
+                      } else if ($value[14] == 2){
+                        echo '<td><a href="controller.php?mode=allitems&del='.$value[0].'" class = "btn-delete">Suspend & cancel trades</a>';
                       }
                       echo '</tr>';
                     }
