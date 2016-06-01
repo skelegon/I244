@@ -62,7 +62,7 @@
     <div class="control-group">
       <label class="control-label"  for="email">E-mail address</label>
       <div class="controls">
-        <input type="e-mail" id="email" name="email" placeholder="" class="form-control">
+        <input type="email" id="email" name="email" placeholder="" class="form-control">
       </div>
     </div><br>
 

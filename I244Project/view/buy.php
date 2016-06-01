@@ -29,7 +29,9 @@
             echo '
               <div class="col-sm-3 col-lg-3 col-md-3">
                 <div class="thumbnail">
-                  <img class="pict" src="'.$value[5].'" alt="pic">
+                  <div class= "pict-container">
+                    <img class="pict" src="'.$value[5].'" alt="pic">
+                  </div>
                   <div class="caption">
                     <h4><a href="?mode=item&id='.$value[0].'">'.$value[1].'</a></h4>
                   </div>

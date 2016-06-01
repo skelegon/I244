@@ -55,6 +55,9 @@
       case "allitems":
         show_allitems();
         break;
+      case "reset":
+        reset_state();
+        break;
       default:
         show_default();
         break;

@@ -91,7 +91,7 @@ function list_all_items(){
 	} else {
 		global $connection;
 		$items = array();
-		$sql = "SELECT * FROM 10153316_item";
+		$sql = "SELECT * FROM 10153316_item WHERE status <> '3'";
 		$result = mysqli_query($connection, $sql);
 		return mysqli_fetch_all($result);
 	}
@@ -180,6 +180,21 @@ function show_declined_requests(){
 	}
 }
 
+function show_admin_cancelled_requests(){
+	if (!isset($_SESSION['username'])) {
+		header("Location: ?mode=login");
+	} else {
+		global $connection;
+		$items = array();
+		$user = get_user_info();
+		$user_ID = $user['user_ID'];
+		$sql = ("SELECT * FROM `10153316_request` WHERE sellitem_ID IN (SELECT item_ID FROM 10153316_item WHERE seller_ID = '$user_ID') AND status = 6");
+		$result = mysqli_query($connection, $sql);
+		return mysqli_fetch_all($result);
+	}
+}
+
+
 function cancel_my_request($id){
 	global $connection;
 		$sql = ("UPDATE 10153316_request req, 10153316_item itm SET req.status='3' WHERE req.sellitem_ID = itm.item_ID AND req.request_ID = '".sanitize_for_db($connection, $id)."' AND itm.seller_ID = ".$_SESSION['userID']."");
@@ -223,6 +238,7 @@ function suspend_user_items($id) {
 		$get_status = "SELECT status FROM 10153316_item WHERE seller_ID='".sanitize_for_db($connection, $id)."'";
 		$s = mysqli_query($connection, $get_status);
 		$status = mysqli_fetch_assoc($s)['status'];
+
 		$msg = "No item statuses were changed";
 		$s = 1;
 		if($status == 0) {
@@ -233,13 +249,14 @@ function suspend_user_items($id) {
 		 	$msg = "Successfully suspended user item";
 		} else if ($status == 2) {
 			$s = 0;
-
-			$del_sell_requests = "DELETE FROM 10153316_request WHERE sellitem_ID = (SELECT item_ID FROM 10153316_item WHERE seller_ID = '".sanitize_for_db($connection, $id)."')";
+			$sql = ("UPDATE 10153316_item SET status='0' WHERE item_ID='".sanitize_for_db($connection, $id)."'");
+			$result = mysqli_query($connection, $sql);
+			$del_sell_requests = "UPDATE 10153316_request SET status='6' WHERE sellitem_ID IN (SELECT item_ID FROM 10153316_item WHERE seller_ID = '".sanitize_for_db($connection, $product_owner)."')";
 			$del_sell = mysqli_query($connection, $del_sell_requests);
-			$del_buy_requests = "DELETE FROM 10153316_request WHERE buyitem_ID = (SELECT item_ID FROM 10153316_item WHERE seller_ID = '".sanitize_for_db($connection, $id)."')";
+			$del_buy_requests = "UPDATE 10153316_request SET status='6' WHERE buyitem_ID IN (SELECT item_ID FROM 10153316_item WHERE seller_ID = '".sanitize_for_db($connection, $product_owner)."')";
 			$del_buy = mysqli_query($connection, $del_buy_requests);
 
-			$msg = "Successfully suspended user item and active requests with the item";
+			return "Successfully suspended & deleted";
 		}
 		$sql = ("UPDATE 10153316_item SET status='".$s."' WHERE seller_ID = '$id'");
 	  mysqli_query($connection, $sql);
@@ -279,6 +296,7 @@ function product_status($id){
 	} else {
 		global $connection;
 		$status = get_item_info($id)['status'];
+		$product_owner = get_item_info($id)['seller_ID'];
 		if ($status == 1){
 			$sql = ("UPDATE 10153316_item SET status='0' WHERE item_ID='".sanitize_for_db($connection, $id)."'");
 			$result = mysqli_query($connection, $sql);
@@ -286,13 +304,10 @@ function product_status($id){
 		} else if($status == 2) {
 			$sql = ("UPDATE 10153316_item SET status='0' WHERE item_ID='".sanitize_for_db($connection, $id)."'");
 			$result = mysqli_query($connection, $sql);
-
-			$del_sell_requests = "DELETE FROM 10153316_request WHERE sellitem_ID = (SELECT item_ID FROM 10153316_item WHERE seller_ID = '".sanitize_for_db($connection, $id)."')";
+			$del_sell_requests = "UPDATE 10153316_request SET status='6' WHERE status='2' AND sellitem_ID IN (SELECT item_ID FROM 10153316_item WHERE seller_ID = '".sanitize_for_db($connection, $product_owner)."')";
 			$del_sell = mysqli_query($connection, $del_sell_requests);
-			var_dump(mysqli_error($connection));
-			$del_buy_requests = "DELETE FROM 10153316_request WHERE buyitem_ID = (SELECT item_ID FROM 10153316_item WHERE seller_ID = '".sanitize_for_db($connection, $id)."')";
+			$del_buy_requests = "UPDATE 10153316_request SET status='6' WHERE status='2' AND buyitem_ID IN (SELECT item_ID FROM 10153316_item WHERE seller_ID = '".sanitize_for_db($connection, $product_owner)."')";
 			$del_buy = mysqli_query($connection, $del_buy_requests);
-			var_dump(mysqli_error($connection));
 
 			return "Successfully suspended & deleted";
 		} else if($status == 0) {
@@ -314,12 +329,12 @@ function accept_request($id){
 
 		$first_item = ("SELECT buyitem_ID FROM 10153316_request WHERE request_ID='".sanitize_for_db($connection, $id)."'");
 		$get_first = mysqli_query($connection, $first_item);
-		$update_first = ("UPDATE 10153316_item SET status='0' WHERE item_ID = ".mysqli_fetch_assoc($get_first)['buyitem_ID']."");
+		$update_first = ("UPDATE 10153316_item SET status='3' WHERE item_ID = ".mysqli_fetch_assoc($get_first)['buyitem_ID']."");
 		$first_result = mysqli_query($connection, $update_first);
 
 		$second_item = ("SELECT sellitem_ID FROM 10153316_request WHERE request_ID='".sanitize_for_db($connection, $id)."'");
 		$get_second =mysqli_query($connection, $second_item);
-		$update_second=("UPDATE 10153316_item SET status='0' WHERE item_ID = ".mysqli_fetch_assoc($get_second)['sellitem_ID']."");
+		$update_second=("UPDATE 10153316_item SET status='3' WHERE item_ID = ".mysqli_fetch_assoc($get_second)['sellitem_ID']."");
 		$second_result=mysqli_query($connection, $update_second);
 	return "Successfully accepted!";
 } else {
@@ -427,7 +442,7 @@ function show_login() {
 	      $errors[]="Password not entered!";
 	    }
 	    if (empty($errors)) {
-	      $query = ("SELECT user_ID FROM 10153316_user WHERE username = '".$username."' AND password = SHA1('".$passwd."') AND status = '1'");
+	      $query = ("SELECT user_ID FROM 10153316_user WHERE username = '".$username."' AND password = SHA1('".$passwd."')");
 	      $result = mysqli_query($connection, $query);
 
 				$check_status = ("SELECT status FROM 10153316_user where username = '".$username."' AND password = SHA1('".$passwd."')");
@@ -577,6 +592,44 @@ function suspend_user($id){
 
 function sanitize_for_db($con, $input){
  return mysqli_real_escape_string($con, strip_tags($input));
+}
+
+
+// For demo purposes only - to reset website to initial state
+function reset_state(){
+	if (is_admin()){
+		global $connection;
+
+		$items = "INSERT INTO `10153316_item` (`item_ID`, `name`, `cond`, `quantity`, `unit`, `thumbnail`, `phone`, `email`, `description`, `comment`, `seller_ID`, `views`, `requests`, `category_ID`, `status`) VALUES
+		(51, 'Blue pants', 'Used', 1, 'set', 'pictures/6fdb46b0092ad21a48643575dbd4447f.jpg', '5050505', 'mati.testija@test.ee', 'Blue pants, rarely used, high quality, comfortable', '', 1, 0, 0, 2, '1'),
+		(52, 'Bently', 'New', 1, 'pcs', 'pictures/183ac196ff683ca54ded95dc549df7fe.jpg', '5050505', 'mati.testija@test.ee', 'Looking to trade for a boat', '', 1, 0, 0, 3, '1'),
+		(53, 'Toyota', 'Used', 1, 'pcs', 'pictures/e552f96951f4cded636695aace547268.png', '5050505', 'mati.testija@test.ee', 'Great car, good milage, looking to trade for a motorcycle', '', 1, 0, 0, 3, '1'),
+		(54, 'Necklace', 'Used', 1, 'pcs', 'pictures/4ac27fc95a68a94cff40c4de8e2a8aa3.jpg', '5050505', 'mati.testija@test.ee', 'Nice white and blue necklace.', '', 1, 0, 0, 4, '1'),
+		(55, 'Coffee table', 'Used', 1, 'pcs', 'pictures/a63803e7dd2c8476f13d16f36818969d.jpg', '555000', 'admin@test.ee', 'Small coffee table, wooden', '', 2, 0, 0, 5, '1'),
+		(57, 'Treadmill', 'Used', 1, 'pcs', 'pictures/588dc02331ce8e945f0b5dc40a0c7459.jpg', '555000', 'admin@test.ee', 'Black treadmill, up to 100kg', '', 2, 0, 0, 1, '1'),
+		(58, 'Beige pants', 'Used', 1, 'set', 'pictures/8c2d4769ce25655f90d35f80cc5013cd.jpg', '555000', 'admin@test.ee', 'Beige semi-formal pants, size 54', '', 2, 0, 0, 2, '1'),
+		(59, 'Ring', 'New', 1, 'pcs', 'pictures/8f7b1035413b3a11494aa91070cdf4bd.jpg', '500500500', 'liina.tuisk@testikonto.ee', 'Silver engagement ring, real diamonds', '', 9, 0, 0, 4, '1'),
+		(60, 'Diamond ring', 'New', 1, 'pcs', 'pictures/7ab1bba69392f9b293aa6f4fd141081b.jpg', '500500500', 'liina.tuisk@testikonto.ee', 'Platinum ring with a big diamond', '', 9, 0, 0, 4, '1'),
+		(61, 'Nokia', 'Used', 1, 'pcs', 'pictures/e5f09910f1c9d3045987081a9a4744f2.jpg', '500500500', 'liina.tuisk@testikonto.ee', 'Nokia 3720, black, good battery', '', 9, 0, 0, 1, '1'),
+		(63, 'Tool set', 'New', 1, 'set', 'pictures/d5cad32ca3ed27b83ba8ae1a711685c5.jpg', '46778712', 'john.smith@mail.ru', 'Set of 15 tools for household use', '', 10, 0, 0, 8, '1'),
+		(64, 'Wrench', 'Used', 2, 'pcs', 'pictures/19480494a0b89fd67104abf981993f58.jpg', '46778712', 'john.smith@mail.ru', 'Good condition wrenches', '', 10, 0, 0, 8, '1'),
+		(65, 'Silver necklace', 'Used', 1, 'pcs', 'pictures/7db474caee66c49e97c29cd595f16b4c.jpg', '46778712', 'john.smith@mail.ru', 'silver necklace with blue stone', '', 10, 0, 0, 4, '1'),
+		(66, 'Mixer', 'Used', 1, 'pcs', 'pictures/5f6a958486c813adcbe5b7d9475abf63.jpg', '46778712', 'john.smith@mail.ru', 'Red kitchen mixer, rarely used', '', 10, 0, 0, 1, '1'),
+		(68, 'Couch', 'New', 1, 'pcs', 'pictures/d759d7833fad55983d3b0cce786b2a5c.jpg', '521646461', 'miki.hiir@mikihiir.lv', 'Red couch, great for a livingroom', '', 11, 0, 0, 5, '1'),
+		(70, 'Red jacket', 'Used', 1, 'pcs', 'pictures/a8c5977efb51c7671e70482d0e58dd05.jpg', '521646461', 'miki.hiir@mikihiir.lv', 'Wind jacket, waterproof', '', 11, 0, 0, 2, '1'),
+		(71, 'Bike', 'Used', 1, 'pcs', 'pictures/d0207e4a3689065037b4089b5c573568.jpg', '5432165432', 'kat.seklaas@hehe.ee', 'Street bicycle, black', '', 12, 0, 0, 7, '1'),
+		(72, 'Grill', 'Used', 1, 'pcs', 'pictures/cfa1bb7bd7025f9b9c17fe7778b6077f.jpg', '5432165432', 'kat.seklaas@hehe.ee', 'Garder grill, good condition, cleaned', '', 12, 0, 0, 6, '1'),
+		(73, 'Chicken', 'Used', 1, 'pcs', 'pictures/e584c6ca033325bc08b23cfbf5c745ee.jpg', '5432165432', 'kat.seklaas@hehe.ee', 'Pet or food', '', 12, 0, 0, 6, '1')";
+
+		mysqli_query($connection, "TRUNCATE TABLE 10153316_item");
+		mysqli_query($connection, "TRUNCATE TABLE 10153316_request");
+		mysqli_query($connection, $items);
+		mysqli_query($connection, "UPDATE 10153316_user SET status='1'");
+
+
+
+		header('Location: controller.php');
+	}
 }
 
 ?>

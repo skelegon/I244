@@ -168,6 +168,12 @@ input[type=radio], input[type=checkbox]
 
 .pict {
     max-height: 150px;
+    max-width: 150px;
+}
+
+.pict-container {
+  min-height: 150px;
+  max-height: 150px;
 }
 
 .body-format {

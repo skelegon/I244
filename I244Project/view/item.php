@@ -16,7 +16,7 @@ echo '<div class="container">
               <div class="panel panel-default">
                 <div class="panel-body">
                   <div class="table-container">
-                      <img class="img-responsive" src="'.$item['thumbnail'].'" alt="'.$item['name'].'">
+                      <img style ="margin: auto" class="img-responsive" src="'.$item['thumbnail'].'" alt="'.$item['name'].'">
                     <div class="caption">
                       <h4>'.$item['name'].'</h4>
                       <p>'.$item['description'].'</p>

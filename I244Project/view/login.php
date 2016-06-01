@@ -9,7 +9,7 @@
 <form class="form-signin" action="controller.php?mode=login" method="POST">
   <h2 class="form-signin-heading">Please sign in</h2>
   <label for="inputUsername" class="sr-only">Username</label>
-  <input name="username" type="username" id="inputUsername" class="form-control" placeholder="Username" required autofocus <?php if (!empty($_POST["username"]))
+  <input name="username" type="text" id="inputUsername" class="form-control" placeholder="Username" required autofocus <?php if (!empty($_POST["username"]))
   echo "value=\"".htmlspecialchars($_POST["username"])."\" "?>>
   <label for="inputPassword" class="sr-only">Password</label>
   <input name="password" type="password" id="inputPassword" class="form-control" placeholder="Password" required>
